@@ -1,0 +1,41 @@
+{
+	"schemaVersion": 1,
+	"id": "cobblemonaddonmod",
+	"version": "${version}",
+	"name": "CobblemonAddonMod",
+	"description": "My first mod I guess",
+	"authors": [
+		"Me!"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "MIT",
+	"icon": "assets/cobblemonaddonmod/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.myz.cobblemonaddonmod.CobblemonAddonMod"
+		],
+		"fabric-datagen": [
+			"com.myz.cobblemonaddonmod.CobblemonAddonModDataGenerator"
+		],
+		"client":
+		[
+			"com.myz.cobblemonaddonmod.CobblemonAddonModClient"
+		]
+	},
+	"mixins": [
+		"cobblemonaddonmod.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.17.2",
+		"minecraft": "~1.21.1",
+		"java": ">=21",
+		"fabric-api": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
