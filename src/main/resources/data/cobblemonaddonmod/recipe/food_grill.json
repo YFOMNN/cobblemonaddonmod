@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key":
+  {
+    "a":
+    {
+      "item": "minecraft:iron_ingot"
+    },
+
+    "b":
+    {
+      "item": "minecraft:coal"
+    }
+  },
+  "pattern":
+  [
+    "bbb",
+    "aaa",
+    "a a"
+  ],
+  "result":
+  {
+    "count": 1,
+    "id": "cobblemonaddonmod:food_grill"
+  }
+}

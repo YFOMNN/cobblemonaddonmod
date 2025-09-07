@@ -1,5 +1,8 @@
 package com.myz.cobblemonaddonmod;
 
+import com.myz.cobblemonaddonmod.block.ModBlocks;
+import com.myz.cobblemonaddonmod.block.entity.ModBlockEntities;
+import com.myz.cobblemonaddonmod.item.ModItems;
 import net.fabricmc.api.ModInitializer;
 
 import org.slf4j.Logger;
@@ -15,5 +18,8 @@ public class CobblemonAddonMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		ModItems.registerModItems();
+		ModBlocks.registerModBlocks();
+		ModBlockEntities.registerBlockEntities();
 	}
 }
