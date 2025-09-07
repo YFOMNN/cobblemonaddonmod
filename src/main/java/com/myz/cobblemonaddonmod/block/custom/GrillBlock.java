@@ -2,6 +2,7 @@ package com.myz.cobblemonaddonmod.block.custom;
 import com.mojang.serialization.MapCodec;
 import com.myz.cobblemonaddonmod.block.entity.custom.GrillBlockEntity;
 import com.myz.cobblemonaddonmod.item.custom.BurgerItem; // Import your BurgerItem
+import com.myz.cobblemonaddonmod.item.custom.FriesItem;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -88,6 +89,26 @@ public class GrillBlock extends BlockWithEntity implements BlockEntityProvider {
                         return ItemActionResult.SUCCESS;
                     } else {
                         System.out.println("Burger already full durability.");
+                        world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.7F, 1.0F);
+                        return ItemActionResult.SUCCESS; // Handled, no repair needed
+                    }
+                }
+                else if (stackOnGrill.getItem() instanceof FriesItem && stack.isEmpty() && player.isSneaking()) { // <-- player.isSneaking() added here
+                    System.out.println("Attempting to repair Fries.");
+                    if (stackOnGrill.isDamaged()) {
+                        int currentDamage = stackOnGrill.getDamage();
+                        int maxDamage = stackOnGrill.getMaxDamage();
+                        int repairAmount = maxDamage / 8;
+                        if (repairAmount == 0) repairAmount = 1;
+
+                        stackOnGrill.setDamage(Math.max(0, currentDamage - repairAmount));
+                        world.playSound(null, pos, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 0.7F, 1.2F);
+                        grillBlockEntity.markDirty();
+                        world.updateListeners(pos, state, state, 0);
+                        System.out.println("Fries repaired! New damage: " + stackOnGrill.getDamage());
+                        return ItemActionResult.SUCCESS;
+                    } else {
+                        System.out.println("Fries already full durability.");
                         world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.7F, 1.0F);
                         return ItemActionResult.SUCCESS; // Handled, no repair needed
                     }

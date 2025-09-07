@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key":
+  {
+    "a":
+    {
+      "item": "minecraft:baked_potato"
+    },
+
+    "b":
+    {
+      "item": "minecraft:paper"
+    }
+  },
+  "pattern":
+  [
+    "aaa",
+    "aaa",
+    "bbb"
+  ],
+  "result":
+  {
+    "count": 1,
+    "id": "cobblemonaddonmod:fries"
+  }
+}

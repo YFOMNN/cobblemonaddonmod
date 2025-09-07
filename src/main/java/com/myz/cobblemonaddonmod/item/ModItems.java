@@ -2,6 +2,7 @@ package com.myz.cobblemonaddonmod.item;
 
 import com.myz.cobblemonaddonmod.CobblemonAddonMod;
 import com.myz.cobblemonaddonmod.item.custom.BurgerItem;
+import com.myz.cobblemonaddonmod.item.custom.FriesItem;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroup;
@@ -13,7 +14,7 @@ import net.minecraft.util.Identifier;
 public class ModItems {
 
     public static final Item BURGER = registerItem("burger", new BurgerItem(new Item.Settings()));
-    public static final Item FRIES = registerItem("fries", new Item(new Item.Settings()));
+    public static final Item FRIES = registerItem("fries", new FriesItem(new Item.Settings()));
 
     private static Item registerItem(String name, Item item)
     {

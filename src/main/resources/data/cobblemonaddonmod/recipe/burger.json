@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key":
+  {
+    "a":
+    {
+      "item": "minecraft:bread"
+    },
+
+    "b":
+    {
+      "item": "farmersdelight:tomato"
+    },
+    "c":
+    {
+      "item": "farmersdelight:cabbage"
+    },
+    "d":
+    {
+      "item": "minecraft:cooked_beef"
+    }
+  },
+  "pattern":
+  [
+    "aaa",
+    "bdc",
+    "aaa"
+  ],
+  "result":
+  {
+    "count": 1,
+    "id": "cobblemonaddonmod:burger"
+  }
+}
