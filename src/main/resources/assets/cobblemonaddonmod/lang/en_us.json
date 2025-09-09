@@ -1,5 +1,8 @@
 {
-  "item.cobblemonaddonmod.burger": "Burger",
-  "item.cobblemonaddonmod.fries": "Fries",
+  "item.cobblemonaddonmod.burger": "Teleportation Burger",
+  "item.cobblemonaddonmod.fries": "Super Duper Dashing Fries",
+  "item.cobblemonaddonmod.ben_and_hadi": "Ben And Hadi's Love Letter",
+  "item.cobblemonaddonmod.weather_milk": "Weather Milk",
+  "item.cobblemonaddonmod.time_soda": "Time Soda",
   "block.cobblemonaddonmod.food_grill": "Food Grill"
 }
