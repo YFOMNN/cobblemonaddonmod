@@ -1,5 +1,6 @@
 package com.myz.cobblemonaddonmod.item.custom;
 
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -70,6 +71,9 @@ public class TimeSoda extends Item {
             // Set the time of day for the target world
             targetWorld.setTimeOfDay(newTime);
             broadcast(server, timeMessage);
+            user.getItemCooldownManager().set(this, 100);
+            stack.damage(1,(ServerWorld) world, ((ServerPlayerEntity) user), item -> { user.sendEquipmentBreakStatus(item, EquipmentSlot.MAINHAND); });
+
         }
 
         return TypedActionResult.success(stack, world.isClient());

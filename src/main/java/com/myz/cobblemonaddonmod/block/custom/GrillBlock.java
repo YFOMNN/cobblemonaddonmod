@@ -1,8 +1,7 @@
 package com.myz.cobblemonaddonmod.block.custom;
 import com.mojang.serialization.MapCodec;
 import com.myz.cobblemonaddonmod.block.entity.custom.GrillBlockEntity;
-import com.myz.cobblemonaddonmod.item.custom.BurgerItem; // Import your BurgerItem
-import com.myz.cobblemonaddonmod.item.custom.FriesItem;
+import com.myz.cobblemonaddonmod.item.custom.*;
 import net.minecraft.block.BlockEntityProvider;
 import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
@@ -109,6 +108,96 @@ public class GrillBlock extends BlockWithEntity implements BlockEntityProvider {
                     }
                 }
                 else if (stackOnGrill.getItem() instanceof FriesItem && stack.isEmpty() && player.isSneaking()) {
+                    System.out.println("Attempting to repair Fries.");
+                    if (stackOnGrill.isDamaged()) {
+                        int currentDamage = stackOnGrill.getDamage();
+                        int maxDamage = stackOnGrill.getMaxDamage();
+                        int repairAmount = maxDamage / 8;
+                        if (repairAmount == 0) repairAmount = 1;
+
+                        stackOnGrill.setDamage(Math.max(0, currentDamage - repairAmount));
+                        world.playSound(null, pos, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 0.7F, 1.2F);
+
+                        // Add smoke particles for repair
+                        if (world instanceof ServerWorld serverWorld) {
+                            serverWorld.spawnParticles(ParticleTypes.SMOKE,
+                                    pos.getX() + 0.5D, pos.getY() + 0.7D, pos.getZ() + 0.5D,
+                                    5, // count
+                                    0.2D, 0.2D, 0.2D, // dx, dy, dz (spread)
+                                    0.05D); // speed (velocity)
+                        }
+
+                        grillBlockEntity.markDirty();
+                        world.updateListeners(pos, state, state, 0);
+                        System.out.println("Fries repaired! New damage: " + stackOnGrill.getDamage());
+                        return ItemActionResult.SUCCESS;
+                    } else {
+                        System.out.println("Fries already full durability.");
+                        world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.7F, 1.0F);
+                        return ItemActionResult.SUCCESS; // Handled, no repair needed
+                    }
+                }
+                else if (stackOnGrill.getItem() instanceof WeatherMilkItem && stack.isEmpty() && player.isSneaking()) {
+                    System.out.println("Attempting to repair Fries.");
+                    if (stackOnGrill.isDamaged()) {
+                        int currentDamage = stackOnGrill.getDamage();
+                        int maxDamage = stackOnGrill.getMaxDamage();
+                        int repairAmount = maxDamage / 8;
+                        if (repairAmount == 0) repairAmount = 1;
+
+                        stackOnGrill.setDamage(Math.max(0, currentDamage - repairAmount));
+                        world.playSound(null, pos, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 0.7F, 1.2F);
+
+                        // Add smoke particles for repair
+                        if (world instanceof ServerWorld serverWorld) {
+                            serverWorld.spawnParticles(ParticleTypes.SMOKE,
+                                    pos.getX() + 0.5D, pos.getY() + 0.7D, pos.getZ() + 0.5D,
+                                    5, // count
+                                    0.2D, 0.2D, 0.2D, // dx, dy, dz (spread)
+                                    0.05D); // speed (velocity)
+                        }
+
+                        grillBlockEntity.markDirty();
+                        world.updateListeners(pos, state, state, 0);
+                        System.out.println("Fries repaired! New damage: " + stackOnGrill.getDamage());
+                        return ItemActionResult.SUCCESS;
+                    } else {
+                        System.out.println("Fries already full durability.");
+                        world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.7F, 1.0F);
+                        return ItemActionResult.SUCCESS; // Handled, no repair needed
+                    }
+                }
+                else if (stackOnGrill.getItem() instanceof TimeSoda && stack.isEmpty() && player.isSneaking()) {
+                    System.out.println("Attempting to repair Fries.");
+                    if (stackOnGrill.isDamaged()) {
+                        int currentDamage = stackOnGrill.getDamage();
+                        int maxDamage = stackOnGrill.getMaxDamage();
+                        int repairAmount = maxDamage / 8;
+                        if (repairAmount == 0) repairAmount = 1;
+
+                        stackOnGrill.setDamage(Math.max(0, currentDamage - repairAmount));
+                        world.playSound(null, pos, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 0.7F, 1.2F);
+
+                        // Add smoke particles for repair
+                        if (world instanceof ServerWorld serverWorld) {
+                            serverWorld.spawnParticles(ParticleTypes.SMOKE,
+                                    pos.getX() + 0.5D, pos.getY() + 0.7D, pos.getZ() + 0.5D,
+                                    5, // count
+                                    0.2D, 0.2D, 0.2D, // dx, dy, dz (spread)
+                                    0.05D); // speed (velocity)
+                        }
+
+                        grillBlockEntity.markDirty();
+                        world.updateListeners(pos, state, state, 0);
+                        System.out.println("Fries repaired! New damage: " + stackOnGrill.getDamage());
+                        return ItemActionResult.SUCCESS;
+                    } else {
+                        System.out.println("Fries already full durability.");
+                        world.playSound(null, pos, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.7F, 1.0F);
+                        return ItemActionResult.SUCCESS; // Handled, no repair needed
+                    }
+                }
+                else if (stackOnGrill.getItem() instanceof BenAndHadiItem && stack.isEmpty() && player.isSneaking()) {
                     System.out.println("Attempting to repair Fries.");
                     if (stackOnGrill.isDamaged()) {
                         int currentDamage = stackOnGrill.getDamage();
