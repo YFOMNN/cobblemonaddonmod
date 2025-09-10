@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key":
+  {
+    "a":
+    {
+      "item": "minecraft:water_bucket"
+    },
+
+    "b":
+    {
+      "item": "minecraft:iron"
+    }
+  },
+  "pattern":
+  [
+    "bab",
+    " b ",
+    "  "
+  ],
+  "result":
+  {
+    "count": 1,
+    "id": "cobblemonaddonmod:burger"
+  }
+}

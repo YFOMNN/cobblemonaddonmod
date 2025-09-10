@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key":
+  {
+    "a":
+    {
+      "item": "minecraft:milk_bucket"
+    },
+    "b":
+    {
+      "item": "minecraft:egg"
+    },
+    "c":
+    {
+      "item": "minecraft:bread"
+    }
+  },
+  "pattern":
+  [
+    "aa ",
+    "bb ",
+    "c  "
+  ],
+  "result":
+  {
+    "count": 1,
+    "id": "cobblemonaddonmod:burger"
+  }
+}
