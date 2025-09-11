@@ -6,7 +6,10 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.state.StateManager;
+import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
@@ -15,21 +18,38 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DataReceiverBlock extends Block {
 
+    public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
+
+
     public DataReceiverBlock(Settings settings) {
         super(settings);
+
+        this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH));
     }
-/*
+
+    @Override
+    protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
+        // Register the FACING property with the block's state manager
+        builder.add(FACING);
+    }
+
+    @Nullable
+    @Override
+    public BlockState getPlacementState(ItemPlacementContext ctx) {
+        // Set the block's facing direction based on the player's look direction when placed
+        return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
+    }
     @Override
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         if (!world.isClient()) {
-            Direction facing = getFacingSafe(world, pos, state, (player instanceof ServerPlayerEntity) ? (ServerPlayerEntity) player : null);
-
+            Direction facing = state.get(FACING);
             List<BlockPos> allResults = new ArrayList<>();
 
 // Define length & width
@@ -62,32 +82,4 @@ public class DataReceiverBlock extends Block {
         }
         return ActionResult.SUCCESS;
     }
-    public static Direction getFacingSafe(World world, BlockPos pos, BlockState state, ServerPlayerEntity debugPlayer) {
-        // if state is null, try to fetch it
-        if (state == null && world != null && pos != null) state = world.getBlockState(pos);
-
-        if (state == null) {
-            if (debugPlayer != null) debugPlayer.sendMessage(Text.literal("No block state available — defaulting NORTH"), false);
-            return Direction.NORTH;
-        }
-
-        // prefer HORIZONTAL_FACING if present
-        if (state.contains(Properties.HORIZONTAL_FACING)) {
-            return state.get(Properties.HORIZONTAL_FACING);
-        }
-
-        // fallback to the general FACING property (some blocks use this)
-        if (state.contains(Properties.FACING)) {
-            return state.get(Properties.FACING);
-        }
-
-        // fallback to HorizontalFacingBlock.FACING (if your block defines its own FACING)
-        if (state.contains(HorizontalFacingBlock.FACING)) {
-            return state.get(HorizontalFacingBlock.FACING);
-        }
-
-        // nothing found — warn once to the player or log and default north
-        if (debugPlayer != null) debugPlayer.sendMessage(Text.literal("Block has no facing property; defaulting to NORTH"), false);
-        return Direction.NORTH;
-    }*/
 }
