@@ -1,19 +1,18 @@
 package com.myz.cobblemonaddonmod.block.custom;
 
-import com.myz.cobblemonaddonmod.block.entity.custom.PokemonSpawnerBlockEntity;
+import com.myz.cobblemonaddonmod.PokemonSpawnHelper;
+import com.myz.cobblemonaddonmod.block.ModBlocks;
+import com.myz.cobblemonaddonmod.block.entity.custom.SpawnManagerBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -22,15 +21,16 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Random;
 
-public class DataReceiverBlock extends Block {
+public class GuessTheCobblemonControlBlock extends Block {
 
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
 
 
-    public DataReceiverBlock(Settings settings) {
+    public GuessTheCobblemonControlBlock(Settings settings) {
         super(settings);
-
         this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH));
     }
 
@@ -48,37 +48,27 @@ public class DataReceiverBlock extends Block {
     }
     @Override
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        if (!world.isClient()) {
-            Direction facing = state.get(FACING);
-            List<BlockPos> allResults = new ArrayList<>();
+        if (!world.isClient) {
+            int radius = 10; // how far around to check
+            List<BlockPos> foundPositions = new ArrayList<>();
 
-// Define length & width
-            int length = 12; // forward
-            int halfWidth = 6; // left/right from center
-
-            for (int forward = 1; forward <= length; forward++) {
-                for (int side = -halfWidth; side <= halfWidth; side++) {
-                    BlockPos checkPos;
-
-                    if (facing == Direction.NORTH || facing == Direction.SOUTH) {
-                        // forward = Z axis, side = X axis
-                        checkPos = pos.add(side, 0, facing.getOffsetZ() * forward);
-                    } else {
-                        // forward = X axis, side = Z axis
-                        checkPos = pos.add(facing.getOffsetX() * forward, 0, side);
-                    }
-
-                    BlockEntity be = world.getBlockEntity(checkPos);
-                    if (be instanceof PokemonSpawnerBlockEntity scanner) {
-                        scanner.scan(world, world.getBlockState(checkPos), checkPos);
-                        allResults.addAll(scanner.getFoundPositions());
+            for (BlockPos checkPos : BlockPos.iterate(pos.add(-radius, -radius, -radius),
+                    pos.add(radius, radius, radius))) {
+                if (world.getBlockState(checkPos).getBlock() == ModBlocks.DATA_RECEIVER) {
+                    foundPositions.add(checkPos.toImmutable());
+               }
+            }
+            for(BlockPos bp: foundPositions)
+            {
+                BlockEntity be = world.getBlockEntity(bp);
+                if (be instanceof SpawnManagerBlockEntity scanner) {
+                    for(BlockPos sp: scanner.spawnPositions)
+                    {
+                        PokemonSpawnHelper.spawnPokemonAt(Objects.requireNonNull(world.getServer()), sp, "pikachu");
                     }
                 }
             }
-            player.sendMessage(
-                    Text.literal("Receiver collected " + allResults.size() + " Oak Planks from nearby scanners."),
-                    false
-            );
+
         }
         return ActionResult.SUCCESS;
     }

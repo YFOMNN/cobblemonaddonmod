@@ -1,15 +1,12 @@
 package com.myz.cobblemonaddonmod.block;
 
 import com.myz.cobblemonaddonmod.CobblemonAddonMod;
-import com.myz.cobblemonaddonmod.block.custom.DataReceiverBlock;
-import com.myz.cobblemonaddonmod.block.custom.GrillBlock;
-import com.myz.cobblemonaddonmod.block.custom.PokemonSpawnerBlock;
+import com.myz.cobblemonaddonmod.block.custom.*;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemGroups;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -20,7 +17,8 @@ public class ModBlocks {
 
     public static final Block FOOD_GRILL = registerBlock("food_grill",new GrillBlock(AbstractBlock.Settings.create().strength(4f).requiresTool().sounds(BlockSoundGroup.ANVIL)));
     public static final Block POKEMON_SPAWNWER_BLOCK = registerBlock("pokemon_spawner_block",new PokemonSpawnerBlock(AbstractBlock.Settings.create().strength(4f).requiresTool().sounds(BlockSoundGroup.ANVIL)));
-    public static final Block DATA_RECEIVER = registerBlock("data_receiver_block",new DataReceiverBlock(AbstractBlock.Settings.create().strength(4f).requiresTool().sounds(BlockSoundGroup.ANVIL)));
+    public static final Block DATA_RECEIVER = registerBlock("data_receiver_block",new SpawnManagerBlock(AbstractBlock.Settings.create().strength(4f).requiresTool().sounds(BlockSoundGroup.ANVIL)));
+    public static final Block GUESS_THE_COBBLEMON_CONTROL_BLOCK = registerBlock("guess_the_cobblemon_control_block",new GuessTheCobblemonControlBlock(AbstractBlock.Settings.create().strength(4f).requiresTool().sounds(BlockSoundGroup.ANVIL)));
 
     private static Block registerBlock(String name, Block block)
     {
@@ -40,6 +38,7 @@ public class ModBlocks {
             fabricItemGroupEntries.add(ModBlocks.FOOD_GRILL);
             fabricItemGroupEntries.add(ModBlocks.POKEMON_SPAWNWER_BLOCK);
             fabricItemGroupEntries.add(ModBlocks.DATA_RECEIVER);
+            fabricItemGroupEntries.add(ModBlocks.GUESS_THE_COBBLEMON_CONTROL_BLOCK);
         });
     }
 }
