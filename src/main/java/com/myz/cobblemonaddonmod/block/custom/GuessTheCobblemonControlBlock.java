@@ -2,6 +2,7 @@ package com.myz.cobblemonaddonmod.block.custom;
 
 import com.myz.cobblemonaddonmod.PokemonSpawnHelper;
 import com.myz.cobblemonaddonmod.block.ModBlocks;
+import com.myz.cobblemonaddonmod.block.entity.custom.PokemonSpawnerBlockEntity;
 import com.myz.cobblemonaddonmod.block.entity.custom.SpawnManagerBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -58,13 +59,36 @@ public class GuessTheCobblemonControlBlock extends Block {
                     foundPositions.add(checkPos.toImmutable());
                }
             }
-            for(BlockPos bp: foundPositions)
+
+            int numberOfPokemonPerSide = 100;
+
+            if(foundPositions.size() > 1)
             {
-                BlockEntity be = world.getBlockEntity(bp);
-                if (be instanceof SpawnManagerBlockEntity scanner) {
-                    for(BlockPos sp: scanner.spawnPositions)
-                    {
-                        PokemonSpawnHelper.spawnPokemonAt(Objects.requireNonNull(world.getServer()), sp, "pikachu");
+                for(BlockPos bp: foundPositions)
+                {
+                    BlockEntity be = world.getBlockEntity(bp);
+                    if (be instanceof SpawnManagerBlockEntity scanner) {
+                        numberOfPokemonPerSide = Math.min(numberOfPokemonPerSide, scanner.spawnPositions.size());
+                    }
+                }
+                List<String> pokemon = new ArrayList<>();
+                for (int i = 0; i< numberOfPokemonPerSide;i++)
+                {
+                    pokemon.add(PokemonSpawnHelper.pickPokemon());
+                }
+                for(BlockPos bp: foundPositions)
+                {
+                    BlockEntity be = world.getBlockEntity(bp);
+                    if (be instanceof SpawnManagerBlockEntity scanner) {
+                        for(int j = 0; j < scanner.spawnPositions.size(); j++)
+                        {
+                            BlockEntity spawnloc = world.getBlockEntity(scanner.spawnPositions.get(j));
+                            if(spawnloc instanceof PokemonSpawnerBlockEntity pokemonSpawnerBlockEntity){
+                                pokemonSpawnerBlockEntity.pokemonOnBlock = pokemon.get(j);
+                                pokemonSpawnerBlockEntity.spawnManagerBlockEntity = scanner;
+                                PokemonSpawnHelper.spawnPokemonAt(Objects.requireNonNull(world.getServer()), scanner.spawnPositions.get(j), pokemon.get(j));
+                            }
+                        }
                     }
                 }
             }

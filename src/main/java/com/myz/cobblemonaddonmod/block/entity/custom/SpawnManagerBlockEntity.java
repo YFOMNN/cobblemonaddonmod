@@ -46,6 +46,7 @@ public class SpawnManagerBlockEntity extends BlockEntity {
                     BlockEntity be = world.getBlockEntity(checkPos);
                     if (be instanceof PokemonSpawnerBlockEntity scanner) {
                         spawnPositions.add(checkPos);
+                        scanner.pokemonOnBlock = null;
                         if (world instanceof ServerWorld serverWorld) {
                             PokemonSpawnHelper.clearPokemonAtSpawner(serverWorld, checkPos);
                         }

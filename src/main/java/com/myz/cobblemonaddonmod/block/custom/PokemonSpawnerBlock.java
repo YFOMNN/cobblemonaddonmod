@@ -1,8 +1,10 @@
 package com.myz.cobblemonaddonmod.block.custom;
 
 import com.mojang.serialization.MapCodec;
+import com.myz.cobblemonaddonmod.PokemonSpawnHelper;
 import com.myz.cobblemonaddonmod.block.entity.custom.GrillBlockEntity;
 import com.myz.cobblemonaddonmod.block.entity.custom.PokemonSpawnerBlockEntity;
+import com.myz.cobblemonaddonmod.block.entity.custom.SpawnManagerBlockEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -20,6 +22,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class PokemonSpawnerBlock extends BlockWithEntity implements BlockEntityProvider{
 
@@ -80,27 +83,15 @@ public class PokemonSpawnerBlock extends BlockWithEntity implements BlockEntityP
 
     @Override
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        if (!world.isClient()) { // Only execute on the server side
-            int radius = 30;
-            List<BlockPos> foundPositions = new ArrayList<>();
-            // Get the facing direction from the block's current state
-            Direction facing = state.get(FACING);
-
-            for (int i = 1; i <= radius; i++) {
-                BlockPos checkPos = pos.offset(facing, i);
-                if (world.getBlockState(checkPos).getBlock() == Blocks.OAK_PLANKS) {
-                    foundPositions.add(checkPos);
+        if (!world.isClient) {
+            BlockEntity be = world.getBlockEntity(pos);
+            if (be instanceof PokemonSpawnerBlockEntity pokemonSpawnerBlockEntity) {
+                // call your function on the BlockEntity
+                if(pokemonSpawnerBlockEntity.spawnManagerBlockEntity != null){
+                    PokemonSpawnHelper.spawnPokemonAt(Objects.requireNonNull(world.getServer()), pokemonSpawnerBlockEntity.spawnManagerBlockEntity.getPos(), pokemonSpawnerBlockEntity.pokemonOnBlock);
                 }
             }
-            if (world.getServer() != null) {
-                world.getServer().getPlayerManager().broadcast(
-                        Text.literal("Found " + foundPositions.size() + " Oak Planks in " + facing.asString() + " direction."),
-                        false // false = chat, true = action bar
-                );
-            }
         }
-
-
         return ActionResult.SUCCESS; // Indicate that the use action was handled
     }
 }
