@@ -1,0 +1,13 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures":
+  {
+    "up": "cobblemonaddonmod:block/food_grill_top",
+    "north": "cobblemonaddonmod:block/food_grill_sides",
+    "south": "cobblemonaddonmod:block/food_grill_sides",
+    "east": "cobblemonaddonmod:block/food_grill_sides",
+    "west": "cobblemonaddonmod:block/food_grill_sides",
+    "down": "cobblemonaddonmod:block/food_grill_bottom",
+    "particle": "cobblemonaddonmod:block/food_grill"
+  }
+}

@@ -10,18 +10,17 @@
 
     "b":
     {
-      "item": "minecraft:iron"
+      "item": "minecraft:iron_ingot"
     }
   },
   "pattern":
   [
     "bab",
-    " b ",
-    "  "
+    " b "
   ],
   "result":
   {
     "count": 1,
-    "id": "cobblemonaddonmod:burger"
+    "id": "cobblemonaddonmod:time_soda"
   }
 }
