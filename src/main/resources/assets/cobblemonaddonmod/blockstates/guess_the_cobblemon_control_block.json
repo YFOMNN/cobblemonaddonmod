@@ -1,0 +1,9 @@
+{
+  "variants":
+  {
+    "":
+    {
+      "model": "cobblemonaddonmod:block/guess_the_cobblemon_control_block"
+    }
+  }
+}

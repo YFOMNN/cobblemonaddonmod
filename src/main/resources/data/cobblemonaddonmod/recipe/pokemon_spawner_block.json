@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key":
+  {
+    "a":
+    {
+      "item": "cobblemon:ultra_ball"
+    },
+
+    "b":
+    {
+      "item": "minecraft:stone"
+    },
+    "c":
+    {
+      "item": "minecraft:redstone"
+    },
+    "d":
+    {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "pattern":
+  [
+    " b ",
+    "dad",
+    "cbc"
+  ],
+  "result":
+  {
+    "count": 1,
+    "id": "cobblemonaddonmod:pokemon_spawner_block"
+  }
+}

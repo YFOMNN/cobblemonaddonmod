@@ -33,6 +33,17 @@ public class SpawnManagerBlock extends BlockWithEntity implements BlockEntityPro
         return new SpawnManagerBlockEntity(pos,state);
     }
 
+    @Override
+    public BlockState onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+        if (!world.isClient) {
+            BlockEntity be = world.getBlockEntity(pos);
+            if (be instanceof SpawnManagerBlockEntity scanner) {
+                // call your function on the BlockEntity
+                scanner.clearSpawnPoints();
+            }
+        }
+        return super.onBreak(world, pos, state, player);
+    }
 
     public SpawnManagerBlock(Settings settings) {
         super(settings);

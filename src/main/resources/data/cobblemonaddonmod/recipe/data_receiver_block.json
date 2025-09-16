@@ -1,0 +1,35 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key":
+  {
+    "a":
+    {
+      "item": "minecraft:diamond"
+    },
+
+    "b":
+    {
+      "item": "minecraft:stone_slab"
+    },
+    "c":
+    {
+      "item": "minecraft:redstone"
+    },
+    "d":
+    {
+      "item": "minecraft:amethyst_shard"
+    }
+  },
+  "pattern":
+  [
+    " a ",
+    "dcd",
+    "bbb"
+  ],
+  "result":
+  {
+    "count": 1,
+    "id": "cobblemonaddonmod:data_receiver_block"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key":
+  {
+    "a":
+    {
+      "item": "cobblemon:electirizer"
+    },
+    "b":
+    {
+      "item": "minecraft:stone"
+    },
+    "c":
+    {
+      "item": "minecraft:redstone"
+    },
+    "d":
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    "e":
+    {
+      "item": "minecraft:copper_ingot"
+    }
+  },
+  "pattern":
+  [
+    "ebe",
+    "dad",
+    "cbc"
+  ],
+  "result":
+  {
+    "count": 1,
+    "id": "cobblemonaddonmod:guess_the_cobblemon_control_block"
+  }
+}
