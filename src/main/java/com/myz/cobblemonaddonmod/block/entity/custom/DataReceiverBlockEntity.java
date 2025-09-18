@@ -82,30 +82,42 @@ public class DataReceiverBlockEntity extends BlockEntity {
     public void prepareForMemoryGame() {
         if (!world.isClient()) {
             int numberOfPairs = spawnPositions.size() / 2;
-            List<int[]> pairs = new ArrayList<>();
             List<String> selectedPokemon = new ArrayList<>();
-            List<Integer> availableNumbers = new ArrayList<>();
-
-            for(int i= 0; i<numberOfPairs*2 ; i++)
-                availableNumbers.add(i);
-            int k;
             for (int i = 0;i<numberOfPairs;i++)
             {
                 selectedPokemon.add(PokemonSpawnHelper.pickPokemon(false));
                 Random random =  new Random();
+                while(true)
+                {
+                    BlockEntity be = world.getBlockEntity(spawnPositions.get(random.nextInt(spawnPositions.size())));
+                    if (be instanceof PokemonSpawnerBlockEntity scanner)
+                    {
+                        if(scanner.getPokemonOnBlock() == null)
+                        {
+                            scanner.setPokemonOnBlock(selectedPokemon.getLast());
+                            CobblemonAddonMod.LOGGER.info("Set pokemon " + scanner.getPokemonOnBlock());
 
-                int pos1,pos2;
-                k = random.nextInt(availableNumbers.size());
-                pos1 = availableNumbers.get(k);
-                availableNumbers.remove(k);
 
-                k = random.nextInt(availableNumbers.size());
-                pos2 = availableNumbers.get(k);
-                availableNumbers.remove(k);
-                pairs.add(new int[]{pos2, pos1});
+                            break;
+                        }
+                    }
+                }
+                while(true)
+                {
+                    BlockEntity be = world.getBlockEntity(spawnPositions.get(random.nextInt(spawnPositions.size())));
+                    if (be instanceof PokemonSpawnerBlockEntity scanner)
+                    {
+                        if(scanner.getPokemonOnBlock() == null)
+                        {
+                            scanner.setPokemonOnBlock(selectedPokemon.getLast());
+                            CobblemonAddonMod.LOGGER.info("Set pokemon " + scanner.getPokemonOnBlock());
+                            break;
+                        }
+                    }
+                }
+
 
             }
-            CobblemonAddonMod.LOGGER.info("Registering mod items for:"  + CobblemonAddonMod.MOD_ID);
 
             for(BlockPos spawnPos: spawnPositions)
             {
