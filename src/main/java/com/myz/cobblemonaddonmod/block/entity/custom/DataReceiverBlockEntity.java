@@ -1,5 +1,6 @@
 package com.myz.cobblemonaddonmod.block.entity.custom;
 
+import com.myz.cobblemonaddonmod.CobblemonAddonMod;
 import com.myz.cobblemonaddonmod.PokemonSpawnHelper;
 import com.myz.cobblemonaddonmod.block.entity.ModBlockEntities;
 import net.minecraft.block.BlockState;
@@ -13,11 +14,11 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.Random;
 
-public class SpawnManagerBlockEntity extends BlockEntity {
+public class DataReceiverBlockEntity extends BlockEntity {
     public  List<BlockPos> spawnPositions = new ArrayList<>();
-    public SpawnManagerBlockEntity(BlockPos pos, BlockState state) {
+    public DataReceiverBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.DATA_RECEIVER_EN, pos, state);
     }
 
@@ -48,13 +49,13 @@ public class SpawnManagerBlockEntity extends BlockEntity {
                     BlockEntity be = world.getBlockEntity(checkPos);
                     if (be instanceof PokemonSpawnerBlockEntity scanner) {
                         spawnPositions.add(checkPos);
-                        scanner.pokemonOnBlock = null;
-                        if (world instanceof ServerWorld serverWorld) {
-                            PokemonSpawnHelper.clearPokemonAtSpawner(serverWorld, checkPos);
-                        }
+                        scanner.setPokemonOnBlock(null);
+                        scanner.setDataReceiverBlockEntity(this);
+                        scanner.setGameMode(0);
                     }
                 }
             }
+            clearSpawnPoints();
             player.sendMessage(
                     Text.literal("Receiver collected " + spawnPositions.size() + " Oak Planks from nearby scanners."),
                     false
@@ -68,11 +69,49 @@ public class SpawnManagerBlockEntity extends BlockEntity {
             {
                 BlockEntity be = world.getBlockEntity(spawnPos);
                 if (be instanceof PokemonSpawnerBlockEntity scanner) {
-                    scanner.pokemonOnBlock = null;
-                    scanner.spawnManagerBlockEntity = null;
+                    scanner.setPokemonOnBlock(null);
+                    scanner.setDataReceiverBlockEntity(null);
                     if (world instanceof ServerWorld serverWorld) {
                         PokemonSpawnHelper.clearPokemonAtSpawner(serverWorld, spawnPos);
                     }
+                }
+            }
+        }
+    }
+
+    public void prepareForMemoryGame() {
+        if (!world.isClient()) {
+            int numberOfPairs = spawnPositions.size() / 2;
+            List<int[]> pairs = new ArrayList<>();
+            List<String> selectedPokemon = new ArrayList<>();
+            List<Integer> availableNumbers = new ArrayList<>();
+
+            for(int i= 0; i<numberOfPairs*2 ; i++)
+                availableNumbers.add(i);
+            int k;
+            for (int i = 0;i<numberOfPairs;i++)
+            {
+                selectedPokemon.add(PokemonSpawnHelper.pickPokemon(false));
+                Random random =  new Random();
+
+                int pos1,pos2;
+                k = random.nextInt(availableNumbers.size());
+                pos1 = availableNumbers.get(k);
+                availableNumbers.remove(k);
+
+                k = random.nextInt(availableNumbers.size());
+                pos2 = availableNumbers.get(k);
+                availableNumbers.remove(k);
+                pairs.add(new int[]{pos2, pos1});
+
+            }
+            CobblemonAddonMod.LOGGER.info("Registering mod items for:"  + CobblemonAddonMod.MOD_ID);
+
+            for(BlockPos spawnPos: spawnPositions)
+            {
+                BlockEntity be = world.getBlockEntity(spawnPos);
+                if (be instanceof PokemonSpawnerBlockEntity scanner) {
+                    scanner.setGameMode(1);
                 }
             }
         }

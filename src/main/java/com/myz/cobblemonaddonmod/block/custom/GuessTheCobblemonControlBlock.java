@@ -2,8 +2,8 @@ package com.myz.cobblemonaddonmod.block.custom;
 
 import com.myz.cobblemonaddonmod.PokemonSpawnHelper;
 import com.myz.cobblemonaddonmod.block.ModBlocks;
+import com.myz.cobblemonaddonmod.block.entity.custom.DataReceiverBlockEntity;
 import com.myz.cobblemonaddonmod.block.entity.custom.PokemonSpawnerBlockEntity;
-import com.myz.cobblemonaddonmod.block.entity.custom.SpawnManagerBlockEntity;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
@@ -12,7 +12,6 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -23,7 +22,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Random;
 
 public class GuessTheCobblemonControlBlock extends Block {
 
@@ -67,25 +65,25 @@ public class GuessTheCobblemonControlBlock extends Block {
                 for(BlockPos bp: foundPositions)
                 {
                     BlockEntity be = world.getBlockEntity(bp);
-                    if (be instanceof SpawnManagerBlockEntity scanner) {
+                    if (be instanceof DataReceiverBlockEntity scanner) {
                         numberOfPokemonPerSide = Math.min(numberOfPokemonPerSide, scanner.spawnPositions.size());
                     }
                 }
                 List<String> pokemon = new ArrayList<>();
                 for (int i = 0; i< numberOfPokemonPerSide;i++)
                 {
-                    pokemon.add(PokemonSpawnHelper.pickPokemon());
+                    pokemon.add(PokemonSpawnHelper.pickPokemon(true));
                 }
                 for(BlockPos bp: foundPositions)
                 {
                     BlockEntity be = world.getBlockEntity(bp);
-                    if (be instanceof SpawnManagerBlockEntity scanner) {
+                    if (be instanceof DataReceiverBlockEntity scanner) {
+                        scanner.clearSpawnPoints();
                         for(int j = 0; j < scanner.spawnPositions.size(); j++)
                         {
                             BlockEntity spawnloc = world.getBlockEntity(scanner.spawnPositions.get(j));
                             if(spawnloc instanceof PokemonSpawnerBlockEntity pokemonSpawnerBlockEntity){
-                                pokemonSpawnerBlockEntity.pokemonOnBlock = pokemon.get(j);
-                                pokemonSpawnerBlockEntity.spawnManagerBlockEntity = scanner;
+                                pokemonSpawnerBlockEntity.setPokemonOnBlock(pokemon.get(j));
                                 PokemonSpawnHelper.spawnPokemonAt(Objects.requireNonNull(world.getServer()), scanner.spawnPositions.get(j), pokemon.get(j));
                             }
                         }

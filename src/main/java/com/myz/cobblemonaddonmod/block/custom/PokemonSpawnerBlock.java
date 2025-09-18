@@ -4,7 +4,6 @@ import com.mojang.serialization.MapCodec;
 import com.myz.cobblemonaddonmod.PokemonSpawnHelper;
 import com.myz.cobblemonaddonmod.block.entity.custom.GrillBlockEntity;
 import com.myz.cobblemonaddonmod.block.entity.custom.PokemonSpawnerBlockEntity;
-import com.myz.cobblemonaddonmod.block.entity.custom.SpawnManagerBlockEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -12,7 +11,6 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -20,8 +18,6 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Objects;
 
 public class PokemonSpawnerBlock extends BlockWithEntity implements BlockEntityProvider{
@@ -87,8 +83,8 @@ public class PokemonSpawnerBlock extends BlockWithEntity implements BlockEntityP
             BlockEntity be = world.getBlockEntity(pos);
             if (be instanceof PokemonSpawnerBlockEntity pokemonSpawnerBlockEntity) {
                 // call your function on the BlockEntity
-                if(pokemonSpawnerBlockEntity.spawnManagerBlockEntity != null){
-                    PokemonSpawnHelper.spawnPokemonAt(Objects.requireNonNull(world.getServer()), pokemonSpawnerBlockEntity.spawnManagerBlockEntity.getPos(), pokemonSpawnerBlockEntity.pokemonOnBlock);
+                if(pokemonSpawnerBlockEntity.getDataReceiverBlockEntity() != null){
+                    PokemonSpawnHelper.spawnPokemonAt(Objects.requireNonNull(world.getServer()), pokemonSpawnerBlockEntity.getDataReceiverBlockEntity().getPos(), pokemonSpawnerBlockEntity.getPokemonOnBlock());
                 }
             }
         }
