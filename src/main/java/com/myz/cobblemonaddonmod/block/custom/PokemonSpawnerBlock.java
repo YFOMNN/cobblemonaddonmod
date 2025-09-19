@@ -1,6 +1,7 @@
 package com.myz.cobblemonaddonmod.block.custom;
 
 import com.mojang.serialization.MapCodec;
+import com.myz.cobblemonaddonmod.CobblemonAddonMod;
 import com.myz.cobblemonaddonmod.PokemonSpawnHelper;
 import com.myz.cobblemonaddonmod.block.entity.custom.GrillBlockEntity;
 import com.myz.cobblemonaddonmod.block.entity.custom.PokemonSpawnerBlockEntity;
@@ -84,7 +85,10 @@ public class PokemonSpawnerBlock extends BlockWithEntity implements BlockEntityP
             if (be instanceof PokemonSpawnerBlockEntity pokemonSpawnerBlockEntity) {
                 // call your function on the BlockEntity
                 if(pokemonSpawnerBlockEntity.getDataReceiverBlockEntity() != null){
-                    PokemonSpawnHelper.spawnPokemonAt(Objects.requireNonNull(world.getServer()), pokemonSpawnerBlockEntity.getDataReceiverBlockEntity().getPos(), pokemonSpawnerBlockEntity.getPokemonOnBlock());
+                    if(!pokemonSpawnerBlockEntity.getDataReceiverBlockEntity().isPowered())
+                        PokemonSpawnHelper.spawnPokemonAt(Objects.requireNonNull(world.getServer()), pokemonSpawnerBlockEntity.getDataReceiverBlockEntity().getPos(), pokemonSpawnerBlockEntity.getPokemonOnBlock(),"");
+                    else
+                        pokemonSpawnerBlockEntity.getDataReceiverBlockEntity().updateFlippedPokemon(pokemonSpawnerBlockEntity.getPokemonOnBlock());
                 }
             }
         }

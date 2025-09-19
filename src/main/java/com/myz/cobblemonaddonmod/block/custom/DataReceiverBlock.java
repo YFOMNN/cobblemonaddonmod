@@ -66,6 +66,10 @@ public class DataReceiverBlock extends BlockWithEntity implements BlockEntityPro
             boolean powered = world.isReceivingRedstonePower(pos);
             if (state.get(POWERED) != powered) {
                 world.setBlockState(pos, state.with(POWERED, powered), 3);
+                BlockEntity be = world.getBlockEntity(pos);
+                if (be instanceof DataReceiverBlockEntity scanner) {
+                    scanner.setPowered(powered);
+                }
             }
         }
     }

@@ -18,13 +18,44 @@ import java.util.Random;
 
 public class DataReceiverBlockEntity extends BlockEntity {
     public  List<BlockPos> spawnPositions = new ArrayList<>();
+    private String lastFlippedPokemon;
+    private boolean isPowered;
+
+    public boolean isPowered() {
+        return isPowered;
+    }
+
+    public void setPowered(boolean powered) {
+        isPowered = powered;
+    }
+
     public DataReceiverBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.DATA_RECEIVER_EN, pos, state);
     }
-
+    public void updateFlippedPokemon(String pokemon)
+    {
+        CobblemonAddonMod.LOGGER.info("RUN  ");
+        if (lastFlippedPokemon == null)
+        {
+            lastFlippedPokemon = pokemon;
+        }
+        else
+        {
+            if(lastFlippedPokemon.equals(pokemon))
+            {
+                CobblemonAddonMod.LOGGER.info("Correct");
+            }
+            else
+            {
+                lastFlippedPokemon = null;
+                CobblemonAddonMod.LOGGER.info("Wrong");
+            }
+        }
+    }
     public void getSideSpawnPoints(BlockState state, World world, BlockPos pos, PlayerEntity player)
     {
         if (!world.isClient()) {
+            clearSpawnPoints();
             spawnPositions.clear();
             if (world instanceof ServerWorld serverWorld)
                 PokemonSpawnHelper.clearPokemonAtSpawner(serverWorld, this.getPos());
@@ -55,9 +86,9 @@ public class DataReceiverBlockEntity extends BlockEntity {
                     }
                 }
             }
-            clearSpawnPoints();
+
             player.sendMessage(
-                    Text.literal("Receiver collected " + spawnPositions.size() + " Oak Planks from nearby scanners."),
+                    Text.literal("Receiver collected " + spawnPositions.size() + " nearby scanners."),
                     false
             );
         }
