@@ -18,7 +18,7 @@ import java.util.Random;
 
 public class DataReceiverBlockEntity extends BlockEntity {
     public  List<BlockPos> spawnPositions = new ArrayList<>();
-    private String lastFlippedPokemon;
+    private PokemonSpawnerBlockEntity lastFlippedPokemonBlock;
     private boolean isPowered;
 
     public boolean isPowered() {
@@ -32,23 +32,28 @@ public class DataReceiverBlockEntity extends BlockEntity {
     public DataReceiverBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.DATA_RECEIVER_EN, pos, state);
     }
-    public void updateFlippedPokemon(String pokemon)
+    public void updateFlippedPokemon(BlockEntity be)
     {
         CobblemonAddonMod.LOGGER.info("RUN  ");
-        if (lastFlippedPokemon == null)
+        if (lastFlippedPokemonBlock == null)
         {
-            lastFlippedPokemon = pokemon;
+            lastFlippedPokemonBlock = (PokemonSpawnerBlockEntity) be ;
         }
         else
         {
-            if(lastFlippedPokemon.equals(pokemon))
+            PokemonSpawnerBlockEntity pokemonSpawnerBlockEntity = (PokemonSpawnerBlockEntity) be;
+            if(pokemonSpawnerBlockEntity.getPokemonOnBlock().equals(lastFlippedPokemonBlock.getPokemonOnBlock()))
             {
                 CobblemonAddonMod.LOGGER.info("Correct");
             }
             else
             {
-                lastFlippedPokemon = null;
                 CobblemonAddonMod.LOGGER.info("Wrong");
+                if (world instanceof ServerWorld serverWorld) {
+                    PokemonSpawnHelper.clearPokemonAtSpawner(serverWorld, lastFlippedPokemonBlock.getPos());
+                    PokemonSpawnHelper.clearPokemonAtSpawner(serverWorld, be.getPos());
+                }
+                lastFlippedPokemonBlock = null;
             }
         }
     }
@@ -113,10 +118,10 @@ public class DataReceiverBlockEntity extends BlockEntity {
     public void prepareForMemoryGame() {
         if (!world.isClient()) {
             int numberOfPairs = spawnPositions.size() / 2;
-            List<String> selectedPokemon = new ArrayList<>();
+            String selectedPokemon;
             for (int i = 0;i<numberOfPairs;i++)
             {
-                selectedPokemon.add(PokemonSpawnHelper.pickPokemon(false));
+                selectedPokemon = (PokemonSpawnHelper.pickPokemon(false));
                 Random random =  new Random();
                 while(true)
                 {
@@ -125,7 +130,7 @@ public class DataReceiverBlockEntity extends BlockEntity {
                     {
                         if(scanner.getPokemonOnBlock() == null)
                         {
-                            scanner.setPokemonOnBlock(selectedPokemon.getLast());
+                            scanner.setPokemonOnBlock(selectedPokemon);
                             CobblemonAddonMod.LOGGER.info("Set pokemon " + scanner.getPokemonOnBlock());
 
 
@@ -140,7 +145,7 @@ public class DataReceiverBlockEntity extends BlockEntity {
                     {
                         if(scanner.getPokemonOnBlock() == null)
                         {
-                            scanner.setPokemonOnBlock(selectedPokemon.getLast());
+                            scanner.setPokemonOnBlock(selectedPokemon);
                             CobblemonAddonMod.LOGGER.info("Set pokemon " + scanner.getPokemonOnBlock());
                             break;
                         }
