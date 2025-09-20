@@ -31,6 +31,20 @@ public class PokemonSpawnHelper {
         // Execute the command as the server
         server.getCommandManager().executeWithPrefix(source, command);
     }
+
+    public static void spawnCatchablePokemonAt(MinecraftServer server, BlockPos pos, String pokemonName) {
+        // Create a command source with OP level
+        ServerCommandSource source = server.getCommandSource()
+                .withLevel(4) // Full permissions
+                .withPosition(Vec3d.ofCenter(pos).add(0,0.5f,0)); // Use the spawn position as command "location"
+
+        // Build the command string
+        String command = "spawnpokemon " + pokemonName;
+
+        // Execute the command as the server
+        server.getCommandManager().executeWithPrefix(source, command);
+    }
+
     public static void clearPokemonAtSpawner(ServerWorld world, BlockPos spawnerPos) {
         // Define search area around the spawner
         Box area = new Box(spawnerPos).expand(1);

@@ -5,7 +5,15 @@ import com.myz.cobblemonaddonmod.PokemonSpawnHelper;
 import com.myz.cobblemonaddonmod.block.entity.ModBlockEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LightningEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.nbt.NbtCompound;
+import net.minecraft.network.listener.ClientPlayPacketListener;
+import net.minecraft.network.packet.Packet;
+import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
+import net.minecraft.particle.ParticleTypes;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.property.Properties;
 import net.minecraft.text.Text;
@@ -21,6 +29,8 @@ public class DataReceiverBlockEntity extends BlockEntity {
     public  List<BlockPos> spawnPositions = new ArrayList<>();
     private PokemonSpawnerBlockEntity lastFlippedPokemonBlock;
     private boolean isPowered;
+    private int numberOfPairsFound;
+    private int numberOfPairs;
 
     public boolean isPowered() {
         return isPowered;
@@ -28,14 +38,23 @@ public class DataReceiverBlockEntity extends BlockEntity {
 
     public void setPowered(boolean powered) {
         isPowered = powered;
+        markDirty(); // marks BE as needing save
+        if (world != null && !world.isClient) {
+            world.updateListeners(pos, getCachedState(), getCachedState(), 3);
+        }
     }
 
     public DataReceiverBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.DATA_RECEIVER_EN, pos, state);
     }
-    public void updateFlippedPokemon(BlockEntity be)
+    public void updateFlippedPokemon(BlockEntity be, World world)
     {
-        CobblemonAddonMod.LOGGER.info("RUN  ");
+
+        if (be == lastFlippedPokemonBlock) {
+            CobblemonAddonMod.LOGGER.info("Clicked the same block twice. Ignoring.");
+            return;
+        }
+
         if (lastFlippedPokemonBlock == null)
         {
             lastFlippedPokemonBlock = (PokemonSpawnerBlockEntity) be ;
@@ -47,6 +66,10 @@ public class DataReceiverBlockEntity extends BlockEntity {
             if(pokemonSpawnerBlockEntity.getPokemonOnBlock().equals(lastFlippedPokemonBlock.getPokemonOnBlock()))
             {
                 CobblemonAddonMod.LOGGER.info("Correct");
+                numberOfPairsFound++;
+                if(numberOfPairsFound == numberOfPairs){
+                    PokemonSpawnHelper.spawnCatchablePokemonAt(Objects.requireNonNull(world.getServer()), this.getPos(), lastFlippedPokemonBlock.getPokemonOnBlock());
+                }
             }
             else
             {
@@ -119,7 +142,8 @@ public class DataReceiverBlockEntity extends BlockEntity {
 
     public void prepareForMemoryGame() {
         if (!world.isClient()) {
-            int numberOfPairs = spawnPositions.size() / 2;
+            numberOfPairs = spawnPositions.size() / 2;
+            numberOfPairsFound = 0;
             String selectedPokemon;
             for (int i = 0;i<numberOfPairs;i++)
             {
@@ -165,5 +189,40 @@ public class DataReceiverBlockEntity extends BlockEntity {
                 }
             }
         }
+    }
+    @Override
+    protected void writeNbt(NbtCompound nbt,RegistryWrapper.WrapperLookup registryLookup) {
+        super.writeNbt(nbt, registryLookup);
+
+        // Save your custom data
+        nbt.putBoolean("IsPowered", isPowered);
+        nbt.putInt("PairsFound", numberOfPairsFound);
+        nbt.putInt("Pairs", numberOfPairs);
+    }
+
+    @Override
+    public void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
+        super.readNbt(nbt,registryLookup);
+
+        // Load your custom data
+        if (nbt.contains("IsPowered")) {
+            isPowered = nbt.getBoolean("IsPowered");
+        }
+        if (nbt.contains("PairsFound")) {
+            numberOfPairsFound = nbt.getInt("PairsFound");
+        }
+        if (nbt.contains("Pairs")) {
+            numberOfPairs = nbt.getInt("Pairs");
+        }
+    }
+
+    @Override
+    public NbtCompound toInitialChunkDataNbt(RegistryWrapper.WrapperLookup registryLookup) {
+        return createNbt(registryLookup);
+    }
+
+    @Override
+    public Packet<ClientPlayPacketListener> toUpdatePacket() {
+        return BlockEntityUpdateS2CPacket.create(this);
     }
 }

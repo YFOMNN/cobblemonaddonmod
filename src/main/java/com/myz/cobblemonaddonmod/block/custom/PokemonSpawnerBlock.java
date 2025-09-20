@@ -90,7 +90,7 @@ public class PokemonSpawnerBlock extends BlockWithEntity implements BlockEntityP
                         PokemonSpawnHelper.spawnPokemonAt(Objects.requireNonNull(world.getServer()), pokemonSpawnerBlockEntity.getDataReceiverBlockEntity().getPos(), pokemonSpawnerBlockEntity.getPokemonOnBlock(),"");
                     else{
                         PokemonSpawnHelper.spawnPokemonAt(Objects.requireNonNull(world.getServer()), pokemonSpawnerBlockEntity.getPos(), pokemonSpawnerBlockEntity.getPokemonOnBlock(),"uncatchable");
-                        pokemonSpawnerBlockEntity.getDataReceiverBlockEntity().updateFlippedPokemon(pokemonSpawnerBlockEntity);
+                        pokemonSpawnerBlockEntity.getDataReceiverBlockEntity().updateFlippedPokemon(pokemonSpawnerBlockEntity,world);
                     }
                 }
             }
