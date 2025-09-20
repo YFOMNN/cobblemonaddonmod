@@ -14,6 +14,7 @@ import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 public class DataReceiverBlockEntity extends BlockEntity {
@@ -41,6 +42,7 @@ public class DataReceiverBlockEntity extends BlockEntity {
         }
         else
         {
+
             PokemonSpawnerBlockEntity pokemonSpawnerBlockEntity = (PokemonSpawnerBlockEntity) be;
             if(pokemonSpawnerBlockEntity.getPokemonOnBlock().equals(lastFlippedPokemonBlock.getPokemonOnBlock()))
             {
@@ -53,8 +55,8 @@ public class DataReceiverBlockEntity extends BlockEntity {
                     PokemonSpawnHelper.clearPokemonAtSpawner(serverWorld, lastFlippedPokemonBlock.getPos());
                     PokemonSpawnHelper.clearPokemonAtSpawner(serverWorld, be.getPos());
                 }
-                lastFlippedPokemonBlock = null;
             }
+            lastFlippedPokemonBlock = null;
         }
     }
     public void getSideSpawnPoints(BlockState state, World world, BlockPos pos, PlayerEntity player)

@@ -82,11 +82,10 @@ public class PokemonSpawnerBlock extends BlockWithEntity implements BlockEntityP
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         if (!world.isClient) {
             BlockEntity be = world.getBlockEntity(pos);
-            CobblemonAddonMod.LOGGER.info("Clicked");
 
             if (be instanceof PokemonSpawnerBlockEntity pokemonSpawnerBlockEntity) {
                 // call your function on the BlockEntity
-                if(pokemonSpawnerBlockEntity.getDataReceiverBlockEntity() != null){            CobblemonAddonMod.LOGGER.info("Clicked");
+                if(pokemonSpawnerBlockEntity.getDataReceiverBlockEntity() != null){
                     if(!pokemonSpawnerBlockEntity.getDataReceiverBlockEntity().isPowered())
                         PokemonSpawnHelper.spawnPokemonAt(Objects.requireNonNull(world.getServer()), pokemonSpawnerBlockEntity.getDataReceiverBlockEntity().getPos(), pokemonSpawnerBlockEntity.getPokemonOnBlock(),"");
                     else{
