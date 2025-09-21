@@ -92,8 +92,8 @@ public class DataReceiverBlockEntity extends BlockEntity {
             Direction facing = state.get(Properties.HORIZONTAL_FACING);
 
 // Define length & width
-            int length = 12; // forward
-            int halfWidth = 6; // left/right from center
+            int length = 24; // forward
+            int halfWidth = 24; // left/right from center
 
             for (int forward = 1; forward <= length; forward++) {
                 for (int side = -halfWidth; side <= halfWidth; side++) {
