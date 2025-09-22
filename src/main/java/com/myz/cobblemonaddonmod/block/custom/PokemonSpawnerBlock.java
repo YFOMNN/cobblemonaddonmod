@@ -1,5 +1,6 @@
 package com.myz.cobblemonaddonmod.block.custom;
 
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.mojang.serialization.MapCodec;
 import com.myz.cobblemonaddonmod.CobblemonAddonMod;
 import com.myz.cobblemonaddonmod.PokemonSpawnHelper;
@@ -87,9 +88,9 @@ public class PokemonSpawnerBlock extends BlockWithEntity implements BlockEntityP
                 // call your function on the BlockEntity
                 if(pokemonSpawnerBlockEntity.getDataReceiverBlockEntity() != null){
                     if(!pokemonSpawnerBlockEntity.getDataReceiverBlockEntity().isPowered())
-                        PokemonSpawnHelper.spawnPokemonAt(Objects.requireNonNull(world.getServer()), pokemonSpawnerBlockEntity.getDataReceiverBlockEntity().getPos(), pokemonSpawnerBlockEntity.getPokemonOnBlock(),"");
+                        PokemonSpawnHelper.spawnPokemonAt(Objects.requireNonNull(world), pokemonSpawnerBlockEntity.getDataReceiverBlockEntity().getPos(), pokemonSpawnerBlockEntity.getPokemonOnBlock(),"");
                     else{
-                        PokemonSpawnHelper.spawnPokemonAt(Objects.requireNonNull(world.getServer()), pokemonSpawnerBlockEntity.getPos(), pokemonSpawnerBlockEntity.getPokemonOnBlock(),"uncatchable");
+                        PokemonSpawnHelper.spawnPokemonAt(Objects.requireNonNull(world), pokemonSpawnerBlockEntity.getPos(), pokemonSpawnerBlockEntity.getPokemonOnBlock(),"uncatchable");
                         pokemonSpawnerBlockEntity.getDataReceiverBlockEntity().updateFlippedPokemon(pokemonSpawnerBlockEntity,world);
                     }
                 }

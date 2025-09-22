@@ -85,7 +85,7 @@ public class GuessTheCobblemonControlBlock extends Block {
                             if(spawnloc instanceof PokemonSpawnerBlockEntity pokemonSpawnerBlockEntity){
                                 pokemonSpawnerBlockEntity.setPokemonOnBlock(pokemon.get(j));
                                 pokemonSpawnerBlockEntity.setDataReceiverBlockEntity(scanner);
-                                PokemonSpawnHelper.spawnPokemonAt(Objects.requireNonNull(world.getServer()), scanner.spawnPositions.get(j), pokemon.get(j), "uncatchable");
+                                PokemonSpawnHelper.spawnPokemonAt(Objects.requireNonNull(world), scanner.spawnPositions.get(j), pokemon.get(j), "uncatchable");
                             }
                         }
                     }
