@@ -69,7 +69,8 @@ public class HighestBstBlock extends BlockWithEntity implements BlockEntityProvi
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         if (!world.isClient) {
 
-            player.openHandledScreen((NamedScreenHandlerFactory) world.getBlockEntity(pos));
+            HighestBstBlockEntity highestBstBlockEntity = (HighestBstBlockEntity) world.getBlockEntity(pos);
+            player.openHandledScreen(highestBstBlockEntity);
 
         }
         return ActionResult.SUCCESS;

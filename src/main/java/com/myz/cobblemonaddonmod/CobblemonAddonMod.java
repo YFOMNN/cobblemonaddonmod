@@ -3,6 +3,7 @@ package com.myz.cobblemonaddonmod;
 import com.myz.cobblemonaddonmod.block.ModBlocks;
 import com.myz.cobblemonaddonmod.block.entity.ModBlockEntities;
 import com.myz.cobblemonaddonmod.item.ModItems;
+import com.myz.cobblemonaddonmod.screen.ModScreenHandler;
 import net.fabricmc.api.ModInitializer;
 
 import org.slf4j.Logger;
@@ -21,5 +22,6 @@ public class CobblemonAddonMod implements ModInitializer {
 		ModItems.registerModItems();
 		ModBlocks.registerModBlocks();
 		ModBlockEntities.registerBlockEntities();
+		ModScreenHandler.registerScreenHandlers();
 	}
 }
