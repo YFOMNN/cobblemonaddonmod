@@ -29,11 +29,7 @@ import java.util.Objects;
 public class HighestBstBlock extends BlockWithEntity implements BlockEntityProvider {
 
     public static final DirectionProperty FACING = Properties.HORIZONTAL_FACING;
-    private boolean gameStarted = false;
-
-    public static final MapCodec<HighestBstBlock> CODEC = HighestBstBlock.createCodec(HighestBstBlock::new);
-    public static final BooleanProperty POWERED = Properties.POWERED;
-
+    public static final MapCodec<HighestBstBlock> CODEC = createCodec(HighestBstBlock::new);
 
     @Override
     protected MapCodec<? extends BlockWithEntity> getCodec() {
@@ -52,9 +48,10 @@ public class HighestBstBlock extends BlockWithEntity implements BlockEntityProvi
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-        // Register the FACING property with the block's state manager
         builder.add(FACING);
     }
+
+    @Override
     protected BlockRenderType getRenderType(BlockState state) {
         return BlockRenderType.MODEL;
     }
@@ -62,16 +59,17 @@ public class HighestBstBlock extends BlockWithEntity implements BlockEntityProvi
     @Nullable
     @Override
     public BlockState getPlacementState(ItemPlacementContext ctx) {
-        // Set the block's facing direction based on the player's look direction when placed
         return this.getDefaultState().with(FACING, ctx.getHorizontalPlayerFacing().getOpposite());
     }
+
     @Override
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         if (!world.isClient) {
-
-            HighestBstBlockEntity highestBstBlockEntity = (HighestBstBlockEntity) world.getBlockEntity(pos);
-            player.openHandledScreen(highestBstBlockEntity);
-
+            // This is the correct way to get a screen handler factory from a block entity.
+            NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
+            if (screenHandlerFactory != null) {
+                player.openHandledScreen(screenHandlerFactory);
+            }
         }
         return ActionResult.SUCCESS;
     }

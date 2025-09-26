@@ -6,12 +6,13 @@ import com.myz.cobblemonaddonmod.item.ModItems;
 import com.myz.cobblemonaddonmod.screen.ModScreenHandler;
 import net.fabricmc.api.ModInitializer;
 
+import net.minecraft.util.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class CobblemonAddonMod implements ModInitializer {
 	public static final String MOD_ID = "cobblemonaddonmod";
-
+	public static final Identifier JOIN_CHALLENGE_PACKET_ID = Identifier.of(MOD_ID, "join_challenge");
 	// This logger is used to write text to the console and the log file.
 	// It is considered best practice to use your mod id as the logger's name.
 	// That way, it's clear which mod wrote info, warnings, and errors.
