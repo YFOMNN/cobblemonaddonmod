@@ -4,6 +4,7 @@ import com.myz.cobblemonaddonmod.CobblemonAddonMod;
 import com.myz.cobblemonaddonmod.block.ModBlocks;
 import com.myz.cobblemonaddonmod.block.entity.custom.DataReceiverBlockEntity;
 import com.myz.cobblemonaddonmod.block.entity.custom.GrillBlockEntity;
+import com.myz.cobblemonaddonmod.block.entity.custom.HighestBstBlockEntity;
 import com.myz.cobblemonaddonmod.block.entity.custom.PokemonSpawnerBlockEntity;
 import net.fabricmc.fabric.api.object.builder.v1.block.entity.FabricBlockEntityTypeBuilder;
 import net.minecraft.block.entity.BlockEntityType;
@@ -33,6 +34,13 @@ public class ModBlockEntities {
                     Identifier.of(CobblemonAddonMod.MOD_ID, "data_receiver_en"),
                     // CORRECTED LINE BELOW:
                     FabricBlockEntityTypeBuilder.create(DataReceiverBlockEntity::new, ModBlocks.DATA_RECEIVER).build(null) // Keep build(null) for Fabric's builder
+            );
+    public static final BlockEntityType<HighestBstBlockEntity> HIGHEST_BST_BE =
+            Registry.register(
+                    Registries.BLOCK_ENTITY_TYPE,
+                    Identifier.of(CobblemonAddonMod.MOD_ID, "data_receiver_en"),
+                    // CORRECTED LINE BELOW:
+                    FabricBlockEntityTypeBuilder.create(HighestBstBlockEntity::new, ModBlocks.HIGHEST_BST_CONTROL_BLOCK).build(null) // Keep build(null) for Fabric's builder
             );
     public static void registerBlockEntities()
     {
