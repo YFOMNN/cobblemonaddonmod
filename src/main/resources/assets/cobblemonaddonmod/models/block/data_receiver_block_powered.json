@@ -1,0 +1,13 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures":
+  {
+    "up": "cobblemonaddonmod:block/data_receiver_sides_powered",
+    "north": "cobblemonaddonmod:block/data_receiver_front",
+    "south": "cobblemonaddonmod:block/data_receiver_sides_powered",
+    "east": "cobblemonaddonmod:block/data_receiver_sides_powered",
+    "west": "cobblemonaddonmod:block/data_receiver_sides_powered",
+    "down": "cobblemonaddonmod:block/data_receiver_sides_powered",
+    "particle": "cobblemonaddonmod:block/data_receiver_sides_powered"
+  }
+}

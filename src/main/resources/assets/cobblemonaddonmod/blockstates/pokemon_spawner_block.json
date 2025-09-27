@@ -1,9 +1,9 @@
 {
   "variants":
   {
-    "":
-    {
-      "model": "cobblemonaddonmod:block/pokemon_spawner_block"
-    }
+    "facing=north": { "model": "cobblemonaddonmod:block/pokemon_spawner_block" },
+    "facing=south": { "model": "cobblemonaddonmod:block/pokemon_spawner_block", "y": 180 },
+    "facing=west":  { "model": "cobblemonaddonmod:block/pokemon_spawner_block", "y": 270 },
+    "facing=east":  { "model": "cobblemonaddonmod:block/pokemon_spawner_block", "y": 90 }
   }
 }
