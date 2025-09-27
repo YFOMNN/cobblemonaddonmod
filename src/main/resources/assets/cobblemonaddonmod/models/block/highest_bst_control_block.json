@@ -1,0 +1,13 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures":
+  {
+    "up": "cobblemonaddonmod:block/highest_bst",
+    "north": "cobblemonaddonmod:block/highest_bst",
+    "south": "cobblemonaddonmod:block/highest_bst",
+    "east": "cobblemonaddonmod:block/highest_bst",
+    "west": "cobblemonaddonmod:block/highest_bst",
+    "down": "cobblemonaddonmod:block/highest_bst",
+    "particle": "cobblemonaddonmod:block/highest_bst"
+  }
+}
