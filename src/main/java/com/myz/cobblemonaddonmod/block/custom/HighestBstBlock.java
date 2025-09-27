@@ -63,14 +63,18 @@ public class HighestBstBlock extends BlockWithEntity implements BlockEntityProvi
     }
 
     @Override
-    protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+    public ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
+        // We only want to open the screen on the server.
         if (!world.isClient) {
-            // This is the correct way to get a screen handler factory from a block entity.
-            NamedScreenHandlerFactory screenHandlerFactory = state.createScreenHandlerFactory(world, pos);
-            if (screenHandlerFactory != null) {
-                player.openHandledScreen(screenHandlerFactory);
+            // Get the block entity at the position.
+            BlockEntity blockEntity = world.getBlockEntity(pos);
+            // Check if it is our block entity (and therefore a screen handler factory).
+            if (blockEntity instanceof HighestBstBlockEntity) {
+                // This is the vanilla method to open a screen from a factory.
+                player.openHandledScreen((HighestBstBlockEntity)blockEntity);
             }
         }
         return ActionResult.SUCCESS;
     }
+
 }
