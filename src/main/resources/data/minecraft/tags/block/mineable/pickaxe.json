@@ -2,6 +2,9 @@
   "replace": false,
   "values":
   [
-    "cobblemonaddonmod:food_grill"
+    "cobblemonaddonmod:food_grill",
+    "cobblemonaddonmod:guess_the_cobblemon_control_block",
+    "cobblemonaddonmod:data_receiver_block",
+    "cobblemonaddonmod:pokemon_spawner_block"
   ]
 }

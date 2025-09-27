@@ -1,0 +1,13 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures":
+  {
+    "up": "cobblemonaddonmod:block/control_block_top",
+    "north": "cobblemonaddonmod:block/control_block_sides",
+    "south": "cobblemonaddonmod:block/control_block_sides",
+    "east": "cobblemonaddonmod:block/control_block_sides",
+    "west": "cobblemonaddonmod:block/control_block_sides",
+    "down": "cobblemonaddonmod:block/control_block_sides",
+    "particle": "cobblemonaddonmod:block/control_block_sides"
+  }
+}

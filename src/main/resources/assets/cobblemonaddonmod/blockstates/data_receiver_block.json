@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "cobblemonaddonmod:block/data_receiver_block" },
+    "facing=south": { "model": "cobblemonaddonmod:block/data_receiver_block", "y": 180 },
+    "facing=west":  { "model": "cobblemonaddonmod:block/data_receiver_block", "y": 270 },
+    "facing=east":  { "model": "cobblemonaddonmod:block/data_receiver_block", "y": 90 }
+  }
+}

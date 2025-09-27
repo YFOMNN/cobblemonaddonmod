@@ -25,6 +25,8 @@ public class SpawnManagerBlockEntity extends BlockEntity {
     {
         if (!world.isClient()) {
             spawnPositions.clear();
+            if (world instanceof ServerWorld serverWorld)
+                PokemonSpawnHelper.clearPokemonAtSpawner(serverWorld, this.getPos());
             Direction facing = state.get(Properties.HORIZONTAL_FACING);
 
 // Define length & width
@@ -57,6 +59,22 @@ public class SpawnManagerBlockEntity extends BlockEntity {
                     Text.literal("Receiver collected " + spawnPositions.size() + " Oak Planks from nearby scanners."),
                     false
             );
+        }
+    }
+    public void clearSpawnPoints()
+    {
+        if (!world.isClient()) {
+            for(BlockPos spawnPos: spawnPositions)
+            {
+                BlockEntity be = world.getBlockEntity(spawnPos);
+                if (be instanceof PokemonSpawnerBlockEntity scanner) {
+                    scanner.pokemonOnBlock = null;
+                    scanner.spawnManagerBlockEntity = null;
+                    if (world instanceof ServerWorld serverWorld) {
+                        PokemonSpawnHelper.clearPokemonAtSpawner(serverWorld, spawnPos);
+                    }
+                }
+            }
         }
     }
 }

@@ -8,6 +8,6 @@
     "east": "cobblemonaddonmod:block/food_grill_sides",
     "west": "cobblemonaddonmod:block/food_grill_sides",
     "down": "cobblemonaddonmod:block/food_grill_bottom",
-    "particle": "cobblemonaddonmod:block/food_grill"
+    "particle": "cobblemonaddonmod:block/food_grill_sides"
   }
 }
