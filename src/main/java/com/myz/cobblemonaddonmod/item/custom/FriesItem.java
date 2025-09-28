@@ -1,5 +1,7 @@
 package com.myz.cobblemonaddonmod.item.custom;
 
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -38,6 +40,8 @@ public class FriesItem extends Item {
             // Sound effect
             world.playSound(null, user.getBlockPos(), SoundEvents.ENTITY_ENDERMAN_TELEPORT,
                     SoundCategory.PLAYERS, 1.0F, 1.0F);
+
+            // The vanilla damage method handles the Unbreaking enchantment automatically.
             stack.damage(1,(ServerWorld) world, ((ServerPlayerEntity) user), item -> { user.sendEquipmentBreakStatus(item, EquipmentSlot.MAINHAND); });
 
         }
@@ -45,4 +49,23 @@ public class FriesItem extends Item {
         return TypedActionResult.success(stack, world.isClient());
     }
 
+    /**
+     * Makes the item enchantable. The return value influences the quality of enchantments.
+     * Higher values are better. Gold items have an enchantability of 22.
+     * @return The enchantability value for this item.
+     */
+    @Override
+    public int getEnchantability() {
+        return 15; // A value similar to iron tools.
+    }
+
+    /**
+     * Allows the item to be enchanted.
+     * @param stack The ItemStack of this item.
+     * @return true if the item can be enchanted, false otherwise.
+     */
+    @Override
+    public boolean isEnchantable(ItemStack stack) {
+        return true;
+    }
 }
