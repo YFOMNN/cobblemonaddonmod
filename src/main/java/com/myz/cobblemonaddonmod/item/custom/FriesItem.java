@@ -48,24 +48,4 @@ public class FriesItem extends Item {
 
         return TypedActionResult.success(stack, world.isClient());
     }
-
-    /**
-     * Makes the item enchantable. The return value influences the quality of enchantments.
-     * Higher values are better. Gold items have an enchantability of 22.
-     * @return The enchantability value for this item.
-     */
-    @Override
-    public int getEnchantability() {
-        return 15; // A value similar to iron tools.
-    }
-
-    /**
-     * Allows the item to be enchanted.
-     * @param stack The ItemStack of this item.
-     * @return true if the item can be enchanted, false otherwise.
-     */
-    @Override
-    public boolean isEnchantable(ItemStack stack) {
-        return true;
-    }
 }
