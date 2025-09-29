@@ -1,5 +1,7 @@
 package com.myz.cobblemonaddonmod.item.custom;
 
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
@@ -38,11 +40,12 @@ public class FriesItem extends Item {
             // Sound effect
             world.playSound(null, user.getBlockPos(), SoundEvents.ENTITY_ENDERMAN_TELEPORT,
                     SoundCategory.PLAYERS, 1.0F, 1.0F);
+
+            // The vanilla damage method handles the Unbreaking enchantment automatically.
             stack.damage(1,(ServerWorld) world, ((ServerPlayerEntity) user), item -> { user.sendEquipmentBreakStatus(item, EquipmentSlot.MAINHAND); });
 
         }
 
         return TypedActionResult.success(stack, world.isClient());
     }
-
 }
