@@ -1,0 +1,26 @@
+{
+  "anvil_cost": 2,
+  "description": {
+    "translate": "enchantment.cobblemonaddonmod.lightning_striker"
+  },
+  "exclusive_set": "#minecraft:exclusive_set/damage",
+  "max_cost": {
+    "base": 25,
+    "per_level_above_first": 9
+  },
+  "max_level": 2,
+  "min_cost": {
+    "base": 5,
+    "per_level_above_first": 7
+  },
+
+  "primary_items": "#cobblemonaddonmod:enchantable/fries_enchantable",
+  "slots": [
+    "mainhand"
+  ],
+  "supported_items": "#cobblemonaddonmod:enchantable/fries_enchantable",
+  "weight": 10,
+
+  "available_for_enchanting_table": true,
+  "available_for_random_selection": true
+}
