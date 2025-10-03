@@ -25,6 +25,7 @@ import net.minecraft.world.World;
 import net.minecraft.text.Text;
 
 
+
 public class FriesItem extends Item {
     public FriesItem(Settings settings) {
         super(settings.maxDamage(100));
@@ -36,27 +37,38 @@ public class FriesItem extends Item {
         ItemStack stack = user.getStackInHand(hand);
 
         if (!world.isClient()) {
-            int lightningLevel = EnchantmentHelper.getLevel(
-                    world.getRegistryManager()
+            ServerWorld serverWorld = (ServerWorld) world;
+
+            RegistryKey<Enchantment> lightningStrikerKey = RegistryKey.of(
+                    RegistryKeys.ENCHANTMENT,
+                    Identifier.of("cobblemonaddonmod", "lightning_striker")
+            );
+
+            // Get the enchantment level (returns 0 if not present)
+            int enchantmentLevel = EnchantmentHelper.getLevel(
+                    serverWorld.getRegistryManager()
                             .get(RegistryKeys.ENCHANTMENT)
-                            .getEntry(LIGHTNING_STRIKER_KEY)
+                            .getEntry(lightningStrikerKey)
                             .orElse(null),
                     stack
             );
 
-            // Check if enchantment is present
-            if (lightningLevel > 0) {
 
-                // Enchantment IS present
-                // Do different things based on level
-                if (lightningLevel == 1) {
-                    // Level 1 logic
-                    user.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING,25));
-                } else if (lightningLevel == 2) {
-                    // Level 2 logic
-                    user.addStatusEffect(new StatusEffectInstance(StatusEffects.LEVITATION,35));
+            switch (enchantmentLevel)
+            {
+                case 1:
+                {
+                    user.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING,20));
+                    break;
                 }
+                case 2:
+                {
+                    user.addStatusEffect(new StatusEffectInstance(StatusEffects.LEVITATION,30));
+                }
+                default:
+                    break;
             }
+
             // Direction the player is looking (includes up/down)
             Vec3d look = user.getRotationVec(1.0F);
             double dashStrength = 5;
@@ -72,7 +84,6 @@ public class FriesItem extends Item {
             world.playSound(null, user.getBlockPos(), SoundEvents.ENTITY_ENDERMAN_TELEPORT,
                     SoundCategory.PLAYERS, 1.0F, 1.0F);
 
-            // Damage item (Unbreaking works automatically)
             stack.damage(1, (ServerWorld) world, (ServerPlayerEntity) user,
                     item -> user.sendEquipmentBreakStatus(item, EquipmentSlot.MAINHAND));
         }
@@ -89,19 +100,6 @@ public class FriesItem extends Item {
     public int getEnchantability() {
         return 14; // same as iron tools
     }
-    // Define your custom enchantment key
-    public static final RegistryKey<Enchantment> GLIDE_ENCHANTMENT_KEY =
-            RegistryKey.of(RegistryKeys.ENCHANTMENT, Identifier.of("cobblemonaddonmod", "glide"));
 
 
-    public static final RegistryKey<Enchantment> LIGHTNING_STRIKER_KEY =
-            RegistryKey.of(RegistryKeys.ENCHANTMENT, Identifier.of("cobblemonaddonmod", "lightning_striker"));
-
-    @Override
-    public boolean canBeEnchantedWith(ItemStack stack, RegistryEntry<Enchantment> enchantment, EnchantingContext context) {
-        return enchantment.matchesKey(Enchantments.UNBREAKING)
-                || enchantment.matchesKey(Enchantments.MENDING) // ✅ now also allows Glide
-                || enchantment.matchesKey(LIGHTNING_STRIKER_KEY); // ✅ Allow lightning striker
-
-    }
 }

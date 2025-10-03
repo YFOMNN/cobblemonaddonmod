@@ -1,4 +1,5 @@
 package com.myz.cobblemonaddonmod.enchantment;
+
 import com.mojang.serialization.MapCodec;
 import com.myz.cobblemonaddonmod.CobblemonAddonMod;
 import com.myz.cobblemonaddonmod.enchantment.custom.LightningStrikerEnchantmentEffect;
@@ -8,13 +9,15 @@ import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
 
 public class ModEnchantmentEffects {
-    public static final MapCodec<? extends EnchantmentEntityEffect> LIGHTNING_STRIKER =
+
+    // Register the effect type
+    public static final MapCodec<LightningStrikerEnchantmentEffect> LIGHTNING_STRIKER_EFFECT =
             registerEntityEffect("lightning_striker", LightningStrikerEnchantmentEffect.CODEC);
 
-
-    private static MapCodec<? extends EnchantmentEntityEffect> registerEntityEffect(String name,
-                                                                                    MapCodec<? extends EnchantmentEntityEffect> codec) {
-        return Registry.register(Registries.ENCHANTMENT_ENTITY_EFFECT_TYPE, Identifier.of(CobblemonAddonMod.MOD_ID, name), codec);
+    private static <T extends EnchantmentEntityEffect> MapCodec<T> registerEntityEffect(String name,
+                                                                                        MapCodec<T> codec) {
+        return Registry.register(Registries.ENCHANTMENT_ENTITY_EFFECT_TYPE,
+                Identifier.of(CobblemonAddonMod.MOD_ID, name), codec);
     }
 
     public static void registerEnchantmentEffects() {
