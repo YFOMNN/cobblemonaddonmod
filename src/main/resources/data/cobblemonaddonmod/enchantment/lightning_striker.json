@@ -1,0 +1,32 @@
+{
+  "description": {
+    "translate": "enchantment.cobblemonaddonmod.lightning_striker"
+  },
+  "supported_items": "cobblemonaddonmod:fries",
+  "primary_items": "cobblemonaddonmod:fries",
+  "weight": 10,
+  "max_level": 2,
+  "min_cost": {
+    "base": 1,
+    "per_level_above_first": 11
+  },
+  "max_cost": {
+    "base": 51,
+    "per_level_above_first": 11
+  },
+  "anvil_cost": 1,
+  "slots": [
+    "mainhand"
+  ],
+  "effects": {
+    "minecraft:post_attack": [
+      {
+        "effect": {
+          "type": "cobblemonaddonmod:lightning_striker"
+        },
+        "enchanted": "attacker",
+        "affected": "victim"
+      }
+    ]
+  }
+}
