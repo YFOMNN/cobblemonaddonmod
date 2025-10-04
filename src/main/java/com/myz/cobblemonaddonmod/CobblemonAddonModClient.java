@@ -3,6 +3,8 @@ package com.myz.cobblemonaddonmod;
 import com.myz.cobblemonaddonmod.block.ModBlocks;
 import com.myz.cobblemonaddonmod.block.entity.ModBlockEntities;
 import com.myz.cobblemonaddonmod.block.entity.renderer.GrillBlockEntityRenderer;
+import com.myz.cobblemonaddonmod.screen.ModScreenHandlers;
+import com.myz.cobblemonaddonmod.screen.custom.TeleportTargetScreen;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.blockrenderlayer.v1.BlockRenderLayerMap;
 import net.minecraft.client.gui.screen.ingame.HandledScreens;
@@ -15,5 +17,6 @@ public class CobblemonAddonModClient implements ClientModInitializer {
     public void onInitializeClient() {
        BlockEntityRendererFactories.register(ModBlockEntities.GRILL_RE, GrillBlockEntityRenderer::new);
         BlockRenderLayerMap.INSTANCE.putBlock(ModBlocks.DATA_RECEIVER, RenderLayer.getCutoutMipped());
+        HandledScreens.register(ModScreenHandlers.TELEPORT_TARGET_SCREEN_HANDLER, TeleportTargetScreen::new);
     }
 }

@@ -9,5 +9,6 @@
   "block.cobblemonaddonmod.data_receiver_block": "Data Receiver Block",
   "block.cobblemonaddonmod.guess_the_cobblemon_control_block": "Guess The Pokemon",
   "block.cobblemonaddonmod.pokemon_spawner_block": "Pokemon Spawner",
-  "enchantment.cobblemonaddonmod.lightning_striker": "Glider"
+  "enchantment.cobblemonaddonmod.lightning_striker": "Glider",
+  "enchantment.cobblemonaddonmod.teleport_effect": "Target Teleport"
 }
