@@ -2,6 +2,7 @@ package com.myz.cobblemonaddonmod.item.custom;
 
 import com.myz.cobblemonaddonmod.enchantment.ModEnchantmentEffects;
 import com.myz.cobblemonaddonmod.screen.custom.TeleportTargetScreenHandler;
+import net.fabricmc.fabric.api.item.v1.EnchantingContext;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
@@ -123,6 +124,37 @@ public class BurgerItem extends Item {
     @Override
     public int getEnchantability() {
         return 14; // same as iron tools
+    }
+    @Override
+    public boolean canBeEnchantedWith(ItemStack stack, RegistryEntry<Enchantment> enchantment, EnchantingContext context) {
+        // Get the enchantment's registry key
+        RegistryKey<Enchantment> enchantmentKey = enchantment.getKey().orElse(null);
+
+        if (enchantmentKey == null) {
+            return false;
+        }
+
+        // Allow Unbreaking
+        if (enchantmentKey.equals(Enchantments.UNBREAKING)) {
+            return true;
+        }
+
+        // Allow Mending
+        if (enchantmentKey.equals(Enchantments.MENDING)) {
+            return true;
+        }
+
+        // Allow Lightning Striker (your custom enchantment)
+        RegistryKey<Enchantment> lightningStrikerKey = RegistryKey.of(
+                RegistryKeys.ENCHANTMENT,
+                Identifier.of("cobblemonaddonmod", "teleport_effect")
+        );
+        if (enchantmentKey.equals(lightningStrikerKey)) {
+            return true;
+        }
+
+        // Deny all other enchantments
+        return false;
     }
 
 }

@@ -69,6 +69,15 @@ public class FriesItem extends Item {
                     break;
             }
 
+            // Get the enchantment level (returns 0 if not present)
+            int efficiencyLevel = EnchantmentHelper.getLevel(
+                    serverWorld.getRegistryManager()
+                            .get(RegistryKeys.ENCHANTMENT)
+                            .getEntry(Enchantments.EFFICIENCY)
+                            .orElse(null),
+                    stack
+            );
+
             // Direction the player is looking (includes up/down)
             Vec3d look = user.getRotationVec(1.0F);
             double dashStrength = 5;
@@ -77,8 +86,32 @@ public class FriesItem extends Item {
             user.addVelocity(look.x * dashStrength, look.y * dashStrength, look.z * dashStrength);
             user.velocityModified = true;
 
-            // Cooldown
-            user.getItemCooldownManager().set(this, 20);
+            // Cooldown\
+            switch (efficiencyLevel)
+            {
+                case 1:{
+                    user.getItemCooldownManager().set(this, 17);
+                    break;
+                }
+                case 2:{
+                    user.getItemCooldownManager().set(this, 14);
+                    break;
+                }
+                case 3:{
+                    user.getItemCooldownManager().set(this, 10);
+                    break;
+                }
+                case 4:{
+                    user.getItemCooldownManager().set(this, 8);
+                    break;
+                }
+                case 5:{
+                    user.getItemCooldownManager().set(this, 5);
+                    break;
+                }
+                default:
+                    user.getItemCooldownManager().set(this, 20);
+            }
 
             // Sound effect
             world.playSound(null, user.getBlockPos(), SoundEvents.ENTITY_ENDERMAN_TELEPORT,
@@ -101,5 +134,38 @@ public class FriesItem extends Item {
         return 14; // same as iron tools
     }
 
+    @Override
+    public boolean canBeEnchantedWith(ItemStack stack, RegistryEntry<Enchantment> enchantment, EnchantingContext context) {
+        // Get the enchantment's registry key
+        RegistryKey<Enchantment> enchantmentKey = enchantment.getKey().orElse(null);
 
+        if (enchantmentKey == null) {
+            return false;
+        }
+
+        // Allow Unbreaking
+        if (enchantmentKey.equals(Enchantments.UNBREAKING)) {
+            return true;
+        }
+        if (enchantmentKey.equals(Enchantments.EFFICIENCY)) {
+            return true;
+        }
+
+        // Allow Mending
+        if (enchantmentKey.equals(Enchantments.MENDING)) {
+            return true;
+        }
+
+        // Allow Lightning Striker (your custom enchantment)
+        RegistryKey<Enchantment> lightningStrikerKey = RegistryKey.of(
+                RegistryKeys.ENCHANTMENT,
+                Identifier.of("cobblemonaddonmod", "lightning_striker")
+        );
+        if (enchantmentKey.equals(lightningStrikerKey)) {
+            return true;
+        }
+
+        // Deny all other enchantments
+        return false;
+    }
 }
