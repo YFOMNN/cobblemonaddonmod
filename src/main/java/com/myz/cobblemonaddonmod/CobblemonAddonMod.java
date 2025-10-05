@@ -4,6 +4,8 @@ import com.myz.cobblemonaddonmod.block.ModBlocks;
 import com.myz.cobblemonaddonmod.block.entity.ModBlockEntities;
 import com.myz.cobblemonaddonmod.enchantment.ModEnchantmentEffects;
 import com.myz.cobblemonaddonmod.item.ModItems;
+import com.myz.cobblemonaddonmod.networking.ModNetworking;
+import com.myz.cobblemonaddonmod.screen.ModScreenHandlers;
 import net.fabricmc.api.ModInitializer;
 
 import net.minecraft.registry.Registry;
@@ -24,6 +26,8 @@ public class CobblemonAddonMod implements ModInitializer {
 		ModBlocks.registerModBlocks();
 		ModBlockEntities.registerBlockEntities();
 		ModEnchantmentEffects.registerEnchantmentEffects();
+		ModScreenHandlers.registerScreenHandlers(); // This line is the fix
+		ModNetworking.registerC2SPackets();
 
 		//registerPackets();
 	}

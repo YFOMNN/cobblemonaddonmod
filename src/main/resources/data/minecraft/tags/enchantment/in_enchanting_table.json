@@ -1,6 +1,7 @@
 {
   "replace": false,
   "values": [
-    "cobblemonaddonmod:lightning_striker"
+    "cobblemonaddonmod:lightning_striker",
+    "cobblemonaddonmod:teleport_effect"
   ]
 }

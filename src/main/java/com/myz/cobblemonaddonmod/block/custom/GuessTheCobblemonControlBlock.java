@@ -70,9 +70,14 @@ public class GuessTheCobblemonControlBlock extends Block {
                     }
                 }
                 List<String> pokemon = new ArrayList<>();
-                for (int i = 0; i< numberOfPokemonPerSide;i++)
+                String selectedPokemon;
+                while (pokemon.size() < numberOfPokemonPerSide)
                 {
-                    pokemon.add(PokemonSpawnHelper.pickPokemon(true));
+                    selectedPokemon = PokemonSpawnHelper.pickPokemon(true);
+                    if(pokemon.contains(selectedPokemon))
+                        continue;
+                    else
+                        pokemon.add(selectedPokemon);
                 }
                 for(BlockPos bp: foundPositions)
                 {

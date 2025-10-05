@@ -1,9 +1,9 @@
 {
   "description": {
-    "translate": "enchantment.cobblemonaddonmod.lightning_striker"
+    "translate": "enchantment.cobblemonaddonmod.teleport_effect"
   },
-  "supported_items": "cobblemonaddonmod:fries",
-  "primary_items": "cobblemonaddonmod:fries",
+  "supported_items": "cobblemonaddonmod:burger",
+  "primary_items": "cobblemonaddonmod:burger",
   "weight": 5,
   "max_level": 2,
   "min_cost": {
@@ -22,7 +22,7 @@
     "minecraft:post_attack": [
       {
         "effect": {
-          "type": "cobblemonaddonmod:lightning_striker"
+          "type": "cobblemonaddonmod:teleport_effect"
         },
         "enchanted": "attacker",
         "affected": "victim"
