@@ -4,10 +4,13 @@ import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.mojang.serialization.MapCodec;
 import com.myz.cobblemonaddonmod.CobblemonAddonMod;
 import com.myz.cobblemonaddonmod.PokemonSpawnHelper;
+import com.myz.cobblemonaddonmod.block.entity.ModBlockEntities;
 import com.myz.cobblemonaddonmod.block.entity.custom.GrillBlockEntity;
 import com.myz.cobblemonaddonmod.block.entity.custom.PokemonSpawnerBlockEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.block.entity.BlockEntityTicker;
+import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
@@ -32,6 +35,10 @@ public class PokemonSpawnerBlock extends BlockWithEntity implements BlockEntityP
         return CODEC;
     }
 
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
+        return validateTicker(type, ModBlockEntities.POKEMON_SPAWN_EN, PokemonSpawnerBlockEntity::tick);
+    }
     @Override
     public @Nullable BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
         return new PokemonSpawnerBlockEntity(pos,state);
