@@ -1,5 +1,6 @@
 package com.myz.cobblemonaddonmod.block.entity.custom;
 
+import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
 import com.myz.cobblemonaddonmod.CobblemonAddonMod;
 import com.myz.cobblemonaddonmod.PokemonSpawnHelper;
 import com.myz.cobblemonaddonmod.block.entity.ModBlockEntities;
@@ -32,6 +33,16 @@ public class DataReceiverBlockEntity extends BlockEntity {
     private int numberOfPairsFound;
     private int numberOfPairs;
 
+    public String getSelectedPokemon() {
+        return selectedPokemon;
+    }
+
+    public void setSelectedPokemon(String selectedPokemon) {
+        this.selectedPokemon = selectedPokemon;
+    }
+
+    private String selectedPokemon;
+
     public boolean isPowered() {
         return isPowered;
     }
@@ -58,26 +69,42 @@ public class DataReceiverBlockEntity extends BlockEntity {
         if (lastFlippedPokemonBlock == null)
         {
             lastFlippedPokemonBlock = (PokemonSpawnerBlockEntity) be ;
+            if(lastFlippedPokemonBlock.isActive())
+            {
+                lastFlippedPokemonBlock = null;
+                return;
+            }
+            PokemonSpawnHelper.spawnPokemonAt(Objects.requireNonNull(world), lastFlippedPokemonBlock.getPos(), lastFlippedPokemonBlock.getPokemonOnBlock(),"uncatchable");
+            ((PokemonSpawnerBlockEntity) be).setActive(true);
         }
         else
         {
 
             PokemonSpawnerBlockEntity pokemonSpawnerBlockEntity = (PokemonSpawnerBlockEntity) be;
+            if(lastFlippedPokemonBlock.isActive() && ((PokemonSpawnerBlockEntity) be).isActive())
+                return;
             if(pokemonSpawnerBlockEntity.getPokemonOnBlock().equals(lastFlippedPokemonBlock.getPokemonOnBlock()))
             {
+                PokemonSpawnHelper.spawnPokemonAt(Objects.requireNonNull(world), be.getPos(), ((PokemonSpawnerBlockEntity) be).getPokemonOnBlock(),"uncatchable");
                 CobblemonAddonMod.LOGGER.info("Correct");
                 numberOfPairsFound++;
                 if(numberOfPairsFound == numberOfPairs){
                     PokemonSpawnHelper.spawnCatchablePokemonAt(Objects.requireNonNull(world.getServer()), this.getPos(), lastFlippedPokemonBlock.getPokemonOnBlock());
                 }
+                ((PokemonSpawnerBlockEntity) be).setActive(true);
+                lastFlippedPokemonBlock.setActive(true);
+
             }
             else
             {
+                PokemonSpawnHelper.spawnPokemonAt(Objects.requireNonNull(world), be.getPos(), ((PokemonSpawnerBlockEntity) be).getPokemonOnBlock(),"uncatchable");
                 CobblemonAddonMod.LOGGER.info("Wrong");
                 if (world instanceof ServerWorld serverWorld) {
                     PokemonSpawnHelper.clearPokemonAtSpawner(serverWorld, lastFlippedPokemonBlock.getPos());
                     PokemonSpawnHelper.clearPokemonAtSpawner(serverWorld, be.getPos());
                 }
+                ((PokemonSpawnerBlockEntity) be).setActive(false);
+                lastFlippedPokemonBlock.setActive(false);
             }
             lastFlippedPokemonBlock = null;
         }
@@ -126,12 +153,15 @@ public class DataReceiverBlockEntity extends BlockEntity {
     public void clearSpawnPoints()
     {
         if (!world.isClient()) {
+            lastFlippedPokemonBlock = null;
             for(BlockPos spawnPos: spawnPositions)
             {
                 BlockEntity be = world.getBlockEntity(spawnPos);
                 if (be instanceof PokemonSpawnerBlockEntity scanner) {
                     scanner.setPokemonOnBlock(null);
                     scanner.setDataReceiverBlockEntity(null);
+                    scanner.setActive(false);
+                    selectedPokemon = null;
                     if (world instanceof ServerWorld serverWorld) {
                         PokemonSpawnHelper.clearPokemonAtSpawner(serverWorld, spawnPos);
                     }
