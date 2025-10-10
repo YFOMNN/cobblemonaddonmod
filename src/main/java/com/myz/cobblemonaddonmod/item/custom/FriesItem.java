@@ -70,49 +70,50 @@ public class FriesItem extends Item {
             }
 
             // Get the enchantment level (returns 0 if not present)
-            int efficiencyLevel = EnchantmentHelper.getLevel(
+            int powerLevel = EnchantmentHelper.getLevel(
                     serverWorld.getRegistryManager()
                             .get(RegistryKeys.ENCHANTMENT)
-                            .getEntry(Enchantments.EFFICIENCY)
+                            .getEntry(Enchantments.POWER)
                             .orElse(null),
                     stack
             );
 
             // Direction the player is looking (includes up/down)
             Vec3d look = user.getRotationVec(1.0F);
-            double dashStrength = 5;
+            double dashStrength = 0;
 
             // Apply velocity in that direction
-            user.addVelocity(look.x * dashStrength, look.y * dashStrength, look.z * dashStrength);
-            user.velocityModified = true;
+
 
             // Cooldown\
-            switch (efficiencyLevel)
+            switch (powerLevel)
             {
                 case 1:{
-                    user.getItemCooldownManager().set(this, 17);
+                    dashStrength = 7;
                     break;
                 }
                 case 2:{
-                    user.getItemCooldownManager().set(this, 14);
+                    dashStrength = 10;
                     break;
                 }
                 case 3:{
-                    user.getItemCooldownManager().set(this, 10);
+                    dashStrength = 15;
                     break;
                 }
                 case 4:{
-                    user.getItemCooldownManager().set(this, 8);
+                    dashStrength = 17;
                     break;
                 }
                 case 5:{
-                    user.getItemCooldownManager().set(this, 5);
+                    dashStrength = 20;
                     break;
                 }
                 default:
-                    user.getItemCooldownManager().set(this, 20);
+                    dashStrength = 5;
             }
-
+            user.addVelocity(look.x * dashStrength, look.y * dashStrength, look.z * dashStrength);
+            user.velocityModified = true;
+            user.getItemCooldownManager().set(this, 20);
             // Sound effect
             world.playSound(null, user.getBlockPos(), SoundEvents.ENTITY_ENDERMAN_TELEPORT,
                     SoundCategory.PLAYERS, 1.0F, 1.0F);
@@ -147,7 +148,7 @@ public class FriesItem extends Item {
         if (enchantmentKey.equals(Enchantments.UNBREAKING)) {
             return true;
         }
-        if (enchantmentKey.equals(Enchantments.EFFICIENCY)) {
+        if (enchantmentKey.equals(Enchantments.POWER)) {
             return true;
         }
 

@@ -5,9 +5,14 @@ import com.cobblemon.mod.common.CobblemonEntities;
 import com.cobblemon.mod.common.api.pokemon.PokemonProperties;
 import com.cobblemon.mod.common.api.pokemon.PokemonPropertyExtractor;
 import com.cobblemon.mod.common.api.pokemon.PokemonSpecies;
+import com.cobblemon.mod.common.api.storage.StoreCoordinates;
+import com.cobblemon.mod.common.entity.pokemon.PokemonBehaviourFlag;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
+import com.cobblemon.mod.common.pokemon.OriginalTrainerType;
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.cobblemon.mod.common.pokemon.Species;
+import com.cobblemon.mod.common.pokemon.status.PersistentStatus;
+import com.cobblemon.mod.common.pokemon.status.PersistentStatusContainer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
@@ -34,7 +39,8 @@ public class PokemonSpawnHelper {
 
         ServerWorld serverWorld = (ServerWorld) world;
 // Build Pokémon data
-        PokemonProperties props = PokemonProperties.Companion.parse(pokemonName + " level=1");
+        PokemonProperties props = PokemonProperties.Companion.parse(pokemonName + " level=1 " + extraflag);
+
         Pokemon pokemonData = props.create();
 
 // Step 2: create the entity with this Pokémon
@@ -51,6 +57,9 @@ public class PokemonSpawnHelper {
                 serverWorld.random.nextFloat() * 360F,
                 0F
         );
+        entity.setInvulnerable(true);
+
+        entity.noClip = true;
 
 // Step 3: check size
         float width  = entity.getWidth();
@@ -67,12 +76,11 @@ public class PokemonSpawnHelper {
             entity.setPokemon(pokemonData);
         }
 
-// Step 4: make uncatchable
+        // Step 4: make uncatchable
 
-// Step 5: spawn
+        // Step 5: spawn
         entity.setAiDisabled(true);
-
-// Spawn into world
+        // Spawn into world
         serverWorld.spawnEntity(entity);
 
 

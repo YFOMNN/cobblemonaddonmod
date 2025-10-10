@@ -8,6 +8,8 @@ import com.myz.cobblemonaddonmod.block.entity.custom.GrillBlockEntity;
 import com.myz.cobblemonaddonmod.block.entity.custom.PokemonSpawnerBlockEntity;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
@@ -17,6 +19,9 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.util.shape.VoxelShapes;
+import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -70,7 +75,7 @@ public class PokemonSpawnerBlock extends BlockWithEntity implements BlockEntityP
         if(state.getBlock() != newState.getBlock())
         {
             BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof GrillBlockEntity) // This part seems unrelated to a spawner block, but kept for context.
+            if (blockEntity instanceof GrillBlockEntity)
             {
                 net.minecraft.util.ItemScatterer.spawn(world, pos, (GrillBlockEntity) blockEntity);
                 world.updateComparators(pos,this);
@@ -87,15 +92,30 @@ public class PokemonSpawnerBlock extends BlockWithEntity implements BlockEntityP
             if (be instanceof PokemonSpawnerBlockEntity pokemonSpawnerBlockEntity) {
                 // call your function on the BlockEntity
                 if(pokemonSpawnerBlockEntity.getDataReceiverBlockEntity() != null){
-                    if(!pokemonSpawnerBlockEntity.getDataReceiverBlockEntity().isPowered())
-                        PokemonSpawnHelper.spawnPokemonAt(Objects.requireNonNull(world), pokemonSpawnerBlockEntity.getDataReceiverBlockEntity().getPos(), pokemonSpawnerBlockEntity.getPokemonOnBlock(),"");
+                    if(!pokemonSpawnerBlockEntity.getDataReceiverBlockEntity().isPowered()) {
+                        if (pokemonSpawnerBlockEntity.getDataReceiverBlockEntity().getSelectedPokemon() == null) {
+                            pokemonSpawnerBlockEntity.getDataReceiverBlockEntity().setSelectedPokemon(pokemonSpawnerBlockEntity.getPokemonOnBlock());
+                            PokemonSpawnHelper.spawnCatchablePokemonAt(Objects.requireNonNull(world.getServer()), pokemonSpawnerBlockEntity.getDataReceiverBlockEntity().getPos(), pokemonSpawnerBlockEntity.getPokemonOnBlock());
+                        }
+                    }
                     else{
-                        PokemonSpawnHelper.spawnPokemonAt(Objects.requireNonNull(world), pokemonSpawnerBlockEntity.getPos(), pokemonSpawnerBlockEntity.getPokemonOnBlock(),"uncatchable");
                         pokemonSpawnerBlockEntity.getDataReceiverBlockEntity().updateFlippedPokemon(pokemonSpawnerBlockEntity,world);
                     }
                 }
             }
         }
-        return ActionResult.SUCCESS; // Indicate that the use action was handled
+        return ActionResult.SUCCESS;
+    }
+
+    @Override
+    protected VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
+        // Items fall through, but players/entities can still walk on it
+        if (context instanceof EntityShapeContext entityContext) {
+            Entity entity = entityContext.getEntity();
+            if (entity instanceof ItemEntity) {
+                return VoxelShapes.empty(); // No collision for items
+            }
+        }
+        return super.getCollisionShape(state, world, pos, context);
     }
 }

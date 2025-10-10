@@ -3,7 +3,12 @@ package com.myz.cobblemonaddonmod.block.entity.custom;
 import com.myz.cobblemonaddonmod.block.entity.ModBlockEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.entity.ItemEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
+import net.minecraft.world.World;
+
+import java.util.List;
 
 public class PokemonSpawnerBlockEntity extends BlockEntity {
 
@@ -11,9 +16,20 @@ public class PokemonSpawnerBlockEntity extends BlockEntity {
     private String pokemonOnBlock;
     private int gameMode;
 
+    public boolean isActive() {
+        return isActive;
+    }
+
+    public void setActive(boolean active) {
+        isActive = active;
+    }
+
+    private boolean isActive = false;
+
     public PokemonSpawnerBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.POKEMON_SPAWN_EN, pos, state);
     }
+
 
 
     public DataReceiverBlockEntity getDataReceiverBlockEntity() {
@@ -37,8 +53,8 @@ public class PokemonSpawnerBlockEntity extends BlockEntity {
     }
 
     public void setGameMode(int gameMode) {
-        if(gameMode>1)
-            gameMode= 0;
+        if(gameMode > 1)
+            gameMode = 0;
         this.gameMode = gameMode;
     }
 }
