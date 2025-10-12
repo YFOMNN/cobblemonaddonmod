@@ -16,6 +16,7 @@ public class ModItems {
     public static final Item BEN_AND_HADI = registerItem("ben_and_hadi", new BenAndHadiItem(new Item.Settings()));
     public static final Item WEATHER_MILK = registerItem("weather_milk", new WeatherMilkItem(new Item.Settings()));
     public static final Item TIME_SODA = registerItem("time_soda", new TimeSoda(new Item.Settings()));
+    public static final Item BOTTLE_CAP = registerItem("bottle_cap", new BottleCapItem(new Item.Settings().maxCount(12)));
 
 
     private static Item registerItem(String name, Item item)
@@ -33,6 +34,7 @@ public class ModItems {
             fabricItemGroupEntries.add(BEN_AND_HADI);
             fabricItemGroupEntries.add(WEATHER_MILK);
             fabricItemGroupEntries.add(TIME_SODA);
+            fabricItemGroupEntries.add(BOTTLE_CAP);
         });
     }
 }

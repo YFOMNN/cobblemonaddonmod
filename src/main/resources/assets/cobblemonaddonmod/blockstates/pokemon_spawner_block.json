@@ -1,9 +1,13 @@
 {
-  "variants":
-  {
-    "facing=north": { "model": "cobblemonaddonmod:block/pokemon_spawner_block" },
-    "facing=south": { "model": "cobblemonaddonmod:block/pokemon_spawner_block", "y": 180 },
-    "facing=west":  { "model": "cobblemonaddonmod:block/pokemon_spawner_block", "y": 270 },
-    "facing=east":  { "model": "cobblemonaddonmod:block/pokemon_spawner_block", "y": 90 }
+  "variants": {
+    "active=false,facing=north": { "model": "cobblemonaddonmod:block/pokemon_spawner_block" },
+    "active=false,facing=south": { "model": "cobblemonaddonmod:block/pokemon_spawner_block", "y": 180 },
+    "active=false,facing=west":  { "model": "cobblemonaddonmod:block/pokemon_spawner_block", "y": 270 },
+    "active=false,facing=east":  { "model": "cobblemonaddonmod:block/pokemon_spawner_block", "y": 90 },
+
+    "active=true,facing=north": { "model": "cobblemonaddonmod:block/pokemon_spawner_block_active" },
+    "active=true,facing=south": { "model": "cobblemonaddonmod:block/pokemon_spawner_block_active", "y": 180 },
+    "active=true,facing=west":  { "model": "cobblemonaddonmod:block/pokemon_spawner_block_active", "y": 270 },
+    "active=true,facing=east":  { "model": "cobblemonaddonmod:block/pokemon_spawner_block_active", "y": 90 }
   }
 }
