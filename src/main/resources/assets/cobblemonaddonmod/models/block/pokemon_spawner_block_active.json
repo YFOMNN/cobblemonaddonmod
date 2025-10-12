@@ -1,0 +1,13 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures":
+  {
+    "up": "cobblemonaddonmod:block/pokemon_spawner_top",
+    "north": "cobblemonaddonmod:block/pokemon_spawner_sides_active",
+    "south": "cobblemonaddonmod:block/pokemon_spawner_sides_active",
+    "east": "cobblemonaddonmod:block/pokemon_spawner_sides_active",
+    "west": "cobblemonaddonmod:block/pokemon_spawner_sides_active",
+    "down": "cobblemonaddonmod:block/pokemon_spawner_sides_active",
+    "particle": "cobblemonaddonmod:block/pokemon_spawner_sides_active"
+  }
+}

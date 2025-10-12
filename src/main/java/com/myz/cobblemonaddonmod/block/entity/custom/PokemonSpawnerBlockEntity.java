@@ -1,6 +1,8 @@
 package com.myz.cobblemonaddonmod.block.entity.custom;
 
+import com.myz.cobblemonaddonmod.block.custom.PokemonSpawnerBlock;
 import com.myz.cobblemonaddonmod.block.entity.ModBlockEntities;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.ItemEntity;
@@ -22,6 +24,12 @@ public class PokemonSpawnerBlockEntity extends BlockEntity {
 
     public void setActive(boolean active) {
         isActive = active;
+
+        if (world != null && !world.isClient) {
+            BlockState state = world.getBlockState(pos);
+            world.setBlockState(pos, state.with(PokemonSpawnerBlock.ACTIVE, active), Block.NOTIFY_ALL);
+            markDirty();
+        }
     }
 
     private boolean isActive = false;

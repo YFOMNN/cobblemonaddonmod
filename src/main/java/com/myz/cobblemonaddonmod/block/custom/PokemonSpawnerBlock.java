@@ -13,6 +13,7 @@ import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
+import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
 import net.minecraft.util.ActionResult;
@@ -31,7 +32,7 @@ public class PokemonSpawnerBlock extends BlockWithEntity implements BlockEntityP
 
     public static final MapCodec<PokemonSpawnerBlock> CODEC = PokemonSpawnerBlock.createCodec(PokemonSpawnerBlock::new);
 
-
+    public static final BooleanProperty ACTIVE = BooleanProperty.of("active");
     @Override
     protected MapCodec<? extends BlockWithEntity> getCodec() {
         return CODEC;
@@ -50,12 +51,15 @@ public class PokemonSpawnerBlock extends BlockWithEntity implements BlockEntityP
         super(settings);
         // Set a default state for the block, including the facing direction
         this.setDefaultState(this.stateManager.getDefaultState().with(FACING, Direction.NORTH));
+        setDefaultState(getDefaultState().with(ACTIVE, false));
     }
 
     @Override
     protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
         // Register the FACING property with the block's state manager
         builder.add(FACING);
+        builder.add(ACTIVE);
+
     }
 
     @Nullable
@@ -95,7 +99,13 @@ public class PokemonSpawnerBlock extends BlockWithEntity implements BlockEntityP
                     if(!pokemonSpawnerBlockEntity.getDataReceiverBlockEntity().isPowered()) {
                         if (pokemonSpawnerBlockEntity.getDataReceiverBlockEntity().getSelectedPokemon() == null) {
                             pokemonSpawnerBlockEntity.getDataReceiverBlockEntity().setSelectedPokemon(pokemonSpawnerBlockEntity.getPokemonOnBlock());
-                            PokemonSpawnHelper.spawnCatchablePokemonAt(Objects.requireNonNull(world.getServer()), pokemonSpawnerBlockEntity.getDataReceiverBlockEntity().getPos(), pokemonSpawnerBlockEntity.getPokemonOnBlock());
+                            PokemonSpawnHelper.spawnPokemonAt(Objects.requireNonNull(world), pokemonSpawnerBlockEntity.getDataReceiverBlockEntity().getPos(), pokemonSpawnerBlockEntity.getPokemonOnBlock(),"");
+                        }
+                        else
+                        {
+                            boolean currentActive = state.get(ACTIVE);
+                            world.setBlockState(pos, state.with(ACTIVE, !currentActive), Block.NOTIFY_ALL);
+                            pokemonSpawnerBlockEntity.setActive(!currentActive);
                         }
                     }
                     else{
