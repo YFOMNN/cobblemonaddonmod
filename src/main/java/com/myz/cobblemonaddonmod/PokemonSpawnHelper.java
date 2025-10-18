@@ -101,7 +101,7 @@ public class PokemonSpawnHelper {
         Random random = new Random();
         int chance = random.nextInt(100);
         if(chance < 100-shinyChance)
-            props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+","") + " level=1 ");
+            props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+","") + " level=50 ");
         else
         {
             props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+","") + " level=1 shiny");

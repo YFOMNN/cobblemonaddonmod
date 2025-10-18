@@ -1,0 +1,9 @@
+{
+  "variants":
+  {
+    "":
+    {
+      "model": "cobblemonaddonmod:block/random_pokemon_battle_block"
+    }
+  }
+}

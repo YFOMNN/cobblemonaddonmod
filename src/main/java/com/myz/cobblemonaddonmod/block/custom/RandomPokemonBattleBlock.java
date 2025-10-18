@@ -76,15 +76,7 @@ public class RandomPokemonBattleBlock extends Block {
                     BlockEntity be = world.getBlockEntity(bp);
                     if(be instanceof PokemonSpawnerBlockEntity pokemonSpawnerBlockEntity){
                         PokemonSpawnHelper.spawnCatchablePokemonAt(Objects.requireNonNull(world), be.getPos(), PokemonSpawnHelper.pickPokemon(true),20);
-                        ItemStack masterBall = new ItemStack(CobblemonItems.MASTER_BALL, 1);
-                        ItemEntity itemEntity = new ItemEntity(
-                                world,
-                                be.getPos().getX() + 0.5,
-                                be.getPos().getY() + 1.0,
-                                be.getPos().getZ() + 0.5,
-                                masterBall
-                        );
-                        world.spawnEntity(itemEntity);
+
                     }
                 }
 
@@ -99,8 +91,18 @@ public class RandomPokemonBattleBlock extends Block {
         if (world instanceof ServerWorld serverWorld) {
             List<ServerPlayerEntity> players = serverWorld.getServer().getPlayerManager().getPlayerList();
 
-            if (players.size() < 2) {
-                return; // Not enough players
+            if (players.isEmpty()) {
+                return; // No players online
+            }
+
+            // If only 1 player, give them 3 master balls
+            if (players.size() == 1) {
+                ServerPlayerEntity singlePlayer = players.get(0);
+                ItemStack masterBalls = new ItemStack(CobblemonItems.MASTER_BALL, 3);
+
+                singlePlayer.giveItemStack(masterBalls);
+                singlePlayer.sendMessage(Text.literal("§aYou received 3 Master Balls for being the only player!"), false);
+                return;
             }
 
             ServerPlayerEntity player1 = null;
@@ -132,8 +134,8 @@ public class RandomPokemonBattleBlock extends Block {
 
             // Give master balls to the two closest players
             if (player1 != null && player2 != null) {
-                ItemStack masterBall1 = new ItemStack(CobblemonItems.MASTER_BALL, 1);
-                ItemStack masterBall2 = new ItemStack(CobblemonItems.MASTER_BALL, 1);
+                ItemStack masterBall1 = new ItemStack(CobblemonItems.MASTER_BALL, 3);
+                ItemStack masterBall2 = new ItemStack(CobblemonItems.MASTER_BALL, 3);
 
                 player1.giveItemStack(masterBall1);
                 player2.giveItemStack(masterBall2);
