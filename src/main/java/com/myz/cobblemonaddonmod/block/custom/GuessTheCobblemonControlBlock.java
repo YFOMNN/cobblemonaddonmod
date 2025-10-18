@@ -12,6 +12,7 @@ import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.Properties;
+import net.minecraft.text.Text;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
@@ -58,7 +59,7 @@ public class GuessTheCobblemonControlBlock extends Block {
                }
             }
 
-            int numberOfPokemonPerSide = 100;
+            int numberOfPokemonPerSide = 0;
 
             if(foundPositions.size() > 1)
             {
@@ -66,7 +67,7 @@ public class GuessTheCobblemonControlBlock extends Block {
                 {
                     BlockEntity be = world.getBlockEntity(bp);
                     if (be instanceof DataReceiverBlockEntity scanner) {
-                        numberOfPokemonPerSide = Math.min(numberOfPokemonPerSide, scanner.spawnPositions.size());
+                        numberOfPokemonPerSide = scanner.spawnPositions.size();
                     }
                 }
                 List<String> pokemon = new ArrayList<>();
@@ -74,6 +75,10 @@ public class GuessTheCobblemonControlBlock extends Block {
                 while (pokemon.size() < numberOfPokemonPerSide)
                 {
                     selectedPokemon = PokemonSpawnHelper.pickPokemon(true);
+                    player.sendMessage(
+                            Text.literal("Set " + selectedPokemon),
+                            false
+                    );
                     if(pokemon.contains(selectedPokemon))
                         continue;
                     else
@@ -83,7 +88,7 @@ public class GuessTheCobblemonControlBlock extends Block {
                 {
                     BlockEntity be = world.getBlockEntity(bp);
                     if (be instanceof DataReceiverBlockEntity scanner) {
-                        scanner.clearSpawnPoints();
+                        //scanner.clearSpawnPoints();
                         for(int j = 0; j < scanner.spawnPositions.size(); j++)
                         {
                             BlockEntity spawnloc = world.getBlockEntity(scanner.spawnPositions.get(j));
