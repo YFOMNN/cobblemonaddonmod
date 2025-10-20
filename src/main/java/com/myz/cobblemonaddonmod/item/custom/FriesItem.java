@@ -79,13 +79,11 @@ public class FriesItem extends Item {
             );
 
             // Direction the player is looking (includes up/down)
-            Vec3d look = user.getRotationVec(1.0F);
+            // Use getRotationVector() which gives exact crosshair direction
+            Vec3d look = user.getRotationVector();
             double dashStrength = 0;
 
             // Apply velocity in that direction
-
-
-            // Cooldown\
             switch (powerLevel)
             {
                 case 1:{
@@ -111,9 +109,14 @@ public class FriesItem extends Item {
                 default:
                     dashStrength = 5;
             }
-            user.addVelocity(look.x * dashStrength, look.y * dashStrength, look.z * dashStrength);
+
+            // Normalize the look vector and multiply by dash strength
+            Vec3d dashVelocity = look.normalize().multiply(dashStrength);
+            user.setVelocity(dashVelocity);
             user.velocityModified = true;
+
             user.getItemCooldownManager().set(this, 20);
+
             // Sound effect
             world.playSound(null, user.getBlockPos(), SoundEvents.ENTITY_ENDERMAN_TELEPORT,
                     SoundCategory.PLAYERS, 1.0F, 1.0F);

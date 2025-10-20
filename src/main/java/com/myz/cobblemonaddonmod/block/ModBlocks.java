@@ -16,9 +16,10 @@ import net.minecraft.util.Identifier;
 public class ModBlocks {
 
     public static final Block FOOD_GRILL = registerBlock("food_grill",new GrillBlock(AbstractBlock.Settings.create().strength(4f).requiresTool().sounds(BlockSoundGroup.ANVIL)));
-    public static final Block POKEMON_SPAWNWER_BLOCK = registerBlock("pokemon_spawner_block",new PokemonSpawnerBlock(AbstractBlock.Settings.create().strength(4f).requiresTool().sounds(BlockSoundGroup.WOOD)));
+    public static final Block POKEMON_SPAWNWER_BLOCK = registerBlock("pokemon_spawner_block",new PokemonSpawnerBlock(AbstractBlock.Settings.create().strength(2f).requiresTool().sounds(BlockSoundGroup.WOOD)));
     public static final Block DATA_RECEIVER = registerBlock("data_receiver_block",new DataReceiverBlock(AbstractBlock.Settings.create().strength(4f).requiresTool().sounds(BlockSoundGroup.ANVIL)));
     public static final Block GUESS_THE_COBBLEMON_CONTROL_BLOCK = registerBlock("guess_the_cobblemon_control_block",new GuessTheCobblemonControlBlock(AbstractBlock.Settings.create().strength(4f).requiresTool().sounds(BlockSoundGroup.COPPER)));
+    public static final Block RANDOM_POKEMON_BATTLE_BLOCK = registerBlock("random_pokemon_battle_block",new RandomPokemonBattleBlock(AbstractBlock.Settings.create().strength(4f).requiresTool().sounds(BlockSoundGroup.COPPER)));
 
     private static Block registerBlock(String name, Block block)
     {
@@ -39,6 +40,7 @@ public class ModBlocks {
             fabricItemGroupEntries.add(ModBlocks.POKEMON_SPAWNWER_BLOCK);
             fabricItemGroupEntries.add(ModBlocks.DATA_RECEIVER);
             fabricItemGroupEntries.add(ModBlocks.GUESS_THE_COBBLEMON_CONTROL_BLOCK);
+            fabricItemGroupEntries.add(ModBlocks.RANDOM_POKEMON_BATTLE_BLOCK);
         });
     }
 }
