@@ -106,6 +106,7 @@ public class PokemonSpawnerBlock extends BlockWithEntity implements BlockEntityP
                             boolean currentActive = state.get(ACTIVE);
                             world.setBlockState(pos, state.with(ACTIVE, !currentActive), Block.NOTIFY_ALL);
                             pokemonSpawnerBlockEntity.setActive(!currentActive);
+
                         }
                     }
                     else{
