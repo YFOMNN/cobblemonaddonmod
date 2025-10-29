@@ -1,10 +1,15 @@
 package com.myz.cobblemonaddonmod.item.custom;
 
+import net.fabricmc.fabric.api.item.v1.EnchantingContext;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
@@ -60,4 +65,26 @@ public class BenAndHadiItem extends Item {
             player.kill();
         }
     }*/
+
+    @Override
+    public boolean canBeEnchantedWith(ItemStack stack, RegistryEntry<Enchantment> enchantment, EnchantingContext context) {
+        // Get the enchantment's registry key
+        RegistryKey<Enchantment> enchantmentKey = enchantment.getKey().orElse(null);
+
+        if (enchantmentKey == null) {
+            return false;
+        }
+
+        // Allow Unbreaking
+        if (enchantmentKey.equals(Enchantments.UNBREAKING)) {
+            return true;
+        }
+        // Allow Mending
+        if (enchantmentKey.equals(Enchantments.MENDING)) {
+            return true;
+        }
+
+        // Deny all other enchantments
+        return false;
+    }
 }
