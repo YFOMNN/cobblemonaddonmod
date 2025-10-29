@@ -39,12 +39,11 @@ public class FriesItem extends Item {
         if (!world.isClient()) {
             ServerWorld serverWorld = (ServerWorld) world;
 
+            // --- Custom Enchantment Logic (No changes) ---
             RegistryKey<Enchantment> lightningStrikerKey = RegistryKey.of(
                     RegistryKeys.ENCHANTMENT,
                     Identifier.of("cobblemonaddonmod", "lightning_striker")
             );
-
-            // Get the enchantment level (returns 0 if not present)
             int enchantmentLevel = EnchantmentHelper.getLevel(
                     serverWorld.getRegistryManager()
                             .get(RegistryKeys.ENCHANTMENT)
@@ -52,24 +51,16 @@ public class FriesItem extends Item {
                             .orElse(null),
                     stack
             );
-
-
-            switch (enchantmentLevel)
-            {
-                case 1:
-                {
-                    user.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING,20));
-                    break;
+            switch (enchantmentLevel) {
+                case 1 -> user.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, 20));
+                case 2 -> user.addStatusEffect(new StatusEffectInstance(StatusEffects.LEVITATION, 30));
+                default -> {
                 }
-                case 2:
-                {
-                    user.addStatusEffect(new StatusEffectInstance(StatusEffects.LEVITATION,30));
-                }
-                default:
-                    break;
             }
 
-            // Get the enchantment level (returns 0 if not present)
+            // --- REVISED DASHING LOGIC ---
+
+            // 1. Get Power Level and keep your original strength values.
             int powerLevel = EnchantmentHelper.getLevel(
                     serverWorld.getRegistryManager()
                             .get(RegistryKeys.ENCHANTMENT)
@@ -77,47 +68,35 @@ public class FriesItem extends Item {
                             .orElse(null),
                     stack
             );
-
-            // Direction the player is looking (includes up/down)
-            // Use getRotationVector() which gives exact crosshair direction
-            Vec3d look = user.getRotationVector();
-            double dashStrength = 0;
-
-            // Apply velocity in that direction
-            switch (powerLevel)
-            {
-                case 1:{
-                    dashStrength = 7;
-                    break;
-                }
-                case 2:{
-                    dashStrength = 10;
-                    break;
-                }
-                case 3:{
-                    dashStrength = 15;
-                    break;
-                }
-                case 4:{
-                    dashStrength = 17;
-                    break;
-                }
-                case 5:{
-                    dashStrength = 20;
-                    break;
-                }
-                default:
-                    dashStrength = 5;
+            double dashStrength;
+            switch (powerLevel) {
+                case 1 -> dashStrength = 7;
+                case 2 -> dashStrength = 10;
+                case 3 -> dashStrength = 15;
+                case 4 -> dashStrength = 17;
+                case 5 -> dashStrength = 20;
+                default -> dashStrength = 5;
             }
 
-            // Normalize the look vector and multiply by dash strength
-            Vec3d dashVelocity = look.normalize().multiply(dashStrength);
-            user.setVelocity(dashVelocity);
-            user.velocityModified = true;
+            // 2. Get the player's raw look direction.
+            Vec3d rawLookDirection = user.getRotationVector();
+            double verticalDampeningFactor = 0.35;
+            Vec3d controlledDirection = new Vec3d(
+                    rawLookDirection.getX(),
+                    rawLookDirection.getY() * verticalDampeningFactor,
+                    rawLookDirection.getZ()
+            ).normalize();
+            Vec3d dashVelocity = controlledDirection.multiply(dashStrength);
 
+            user.addVelocity(dashVelocity.getX(), dashVelocity.getY(), dashVelocity.getZ());
+            user.velocityModified = true;
+            if (user instanceof ServerPlayerEntity serverPlayer) {
+                serverPlayer.networkHandler.sendPacket(
+                        new net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket(serverPlayer)
+                );
+            }
             user.getItemCooldownManager().set(this, 20);
 
-            // Sound effect
             world.playSound(null, user.getBlockPos(), SoundEvents.ENTITY_ENDERMAN_TELEPORT,
                     SoundCategory.PLAYERS, 1.0F, 1.0F);
 

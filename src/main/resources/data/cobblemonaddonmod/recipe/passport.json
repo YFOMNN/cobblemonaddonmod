@@ -5,12 +5,12 @@
   {
     "a":
     {
-      "item": "minecraft:water_bucket"
+      "item": "cobblemonaddonmod:bottle_cap"
     },
 
     "b":
     {
-      "item": "minecraft:iron_ingot"
+      "item": "minecraft:leather"
     }
   },
   "pattern":
@@ -21,6 +21,6 @@
   "result":
   {
     "count": 1,
-    "id": "cobblemonaddonmod:time_soda"
+    "id": "cobblemonaddonmod:passport"
   }
 }

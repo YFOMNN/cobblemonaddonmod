@@ -95,16 +95,43 @@ public class PokemonSpawnHelper {
     }
 
     public static void spawnCatchablePokemonAt(World world, BlockPos pos, String pokemonName,float shinyChance) {
+        List<String> ivStats = new ArrayList<>();
+        ivStats.add(" hp_iv=31");
+        ivStats.add(" attack_iv=31");
+        ivStats.add(" special_attack_iv=31");
+        ivStats.add(" defence_iv=31");
+        ivStats.add(" special_defence_iv=31");
+        ivStats.add(" speed_iv=31");
+
+        // 2. Randomly shuffle the list.
+        Collections.shuffle(ivStats);
+
         ServerWorld serverWorld = (ServerWorld) world;
 // Build Pokémon data
         PokemonProperties props;
         Random random = new Random();
         int chance = random.nextInt(100);
+        int selectedIV;
         if(chance < 100-shinyChance)
             props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+","") + " level=50 ");
         else
         {
-            props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+","") + " level=1 shiny");
+            int perfectIVchance = random.nextInt(100);
+            if (perfectIVchance < 50) {
+                props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+", "") + " level=50 shiny");
+            }
+            else if (perfectIVchance < 70) {
+                props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+", "") + " level=50 shiny "+ ivStats.get(0));
+            }
+            else if (perfectIVchance < 85) {
+                props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+", "") + " level=50 shiny"+ivStats.get(1)+ivStats.get(0));
+            }
+            else if (perfectIVchance < 95) {
+                props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+", "") + " level=50 shiny" + ivStats.get(0)  + ivStats.get(1)+ ivStats.get(2)+ ivStats.get(3));
+            }
+            else{
+                props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+", "") + " level=50 shiny " + ivStats.get(0)  + ivStats.get(1)+ ivStats.get(2)+ ivStats.get(3)+ ivStats.get(4)+ ivStats.get(5));
+            }
         }
         Pokemon pokemonData = props.create();
 
