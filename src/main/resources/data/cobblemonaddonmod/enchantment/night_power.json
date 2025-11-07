@@ -1,0 +1,33 @@
+{
+  "description": {
+    "translate": "enchantment.cobblemonaddonmod.night_power"
+  },
+  "supported_items": "cobblemonaddonmod:time_soda",
+  "primary_items": "cobblemonaddonmod:time_soda",
+  "weight": 5,
+  "max_level": 1,
+  "min_cost": {
+    "base": 1,
+    "per_level_above_first": 11
+  },
+  "max_cost": {
+    "base": 51,
+    "per_level_above_first": 11
+  },
+  "anvil_cost": 1,
+  "slots": [
+    "mainhand"
+  ],
+  "exclusive_set": "#cobblemonaddonmod:time_soda_exclusive",
+  "effects": {
+    "minecraft:post_attack": [
+      {
+        "effect": {
+          "type": "cobblemonaddonmod:night_power"
+        },
+        "enchanted": "attacker",
+        "affected": "victim"
+      }
+    ]
+  }
+}

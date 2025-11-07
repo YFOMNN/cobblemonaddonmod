@@ -3,11 +3,11 @@
   "textures":
   {
     "up": "cobblemonaddonmod:block/random_pokemon_battle_block_top",
-    "north": "cobblemonaddonmod:block/control_block_sides",
-    "south": "cobblemonaddonmod:block/control_block_sides",
-    "east": "cobblemonaddonmod:block/control_block_sides",
-    "west": "cobblemonaddonmod:block/control_block_sides",
-    "down": "cobblemonaddonmod:block/control_block_sides",
-    "particle": "cobblemonaddonmod:block/control_block_sides"
+    "north": "cobblemonaddonmod:block/random_pokemon_battle_block_top",
+    "south": "cobblemonaddonmod:block/random_pokemon_battle_block_top",
+    "east": "cobblemonaddonmod:block/random_pokemon_battle_block_top",
+    "west": "cobblemonaddonmod:block/random_pokemon_battle_block_top",
+    "down": "cobblemonaddonmod:block/random_pokemon_battle_block_top",
+    "particle": "cobblemonaddonmod:block/random_pokemon_battle_block_top"
   }
 }

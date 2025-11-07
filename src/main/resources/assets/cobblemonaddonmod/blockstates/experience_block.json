@@ -1,0 +1,9 @@
+{
+  "variants":
+  {
+    "":
+    {
+      "model": "cobblemonaddonmod:block/experience_block"
+    }
+  }
+}

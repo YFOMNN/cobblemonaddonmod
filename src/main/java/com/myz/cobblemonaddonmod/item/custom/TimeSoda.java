@@ -2,8 +2,11 @@ package com.myz.cobblemonaddonmod.item.custom;
 
 import net.fabricmc.fabric.api.item.v1.EnchantingContext;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -55,26 +58,58 @@ public class TimeSoda extends Item {
 
             long newTime;
             String timeMessage;
-
-            switch (choice) {
-                case 0 -> { // Day (e.g., 1000 ticks into the day)
-                    newTime = 1000;
-                    timeMessage = "[Server] The time has been set to Day!";
-                }
-                case 1 -> { // Sunset/Dusk (e.g., around 13000 ticks)
-                    newTime = 13000;
-                    timeMessage = "[Server] The sun begins to set...";
-                }
-                case 2 -> { // Night (e.g., around 18000 ticks)
-                    newTime = 18000;
-                    timeMessage = "[Server] The moon now shines bright!";
-                }
-                default -> { // Fallback, shouldn't happen with nextInt(3)
-                    newTime = targetWorld.getTimeOfDay(); // Keep current time
-                    timeMessage = "[Server] The time seems unchanged.";
+            RegistryKey<Enchantment> day_power_enchant = RegistryKey.of(
+                    RegistryKeys.ENCHANTMENT,
+                    Identifier.of("cobblemonaddonmod", "day_power")
+            );
+            int dayPower = EnchantmentHelper.getLevel(
+                    serverWorld.getRegistryManager()
+                            .get(RegistryKeys.ENCHANTMENT)
+                            .getEntry(day_power_enchant)
+                            .orElse(null),
+                    stack
+            );
+            RegistryKey<Enchantment> night_power_enchant = RegistryKey.of(
+                    RegistryKeys.ENCHANTMENT,
+                    Identifier.of("cobblemonaddonmod", "night_power")
+            );
+            int nightPower = EnchantmentHelper.getLevel(
+                    serverWorld.getRegistryManager()
+                            .get(RegistryKeys.ENCHANTMENT)
+                            .getEntry(night_power_enchant)
+                            .orElse(null),
+                    stack
+            );
+            if(dayPower == 1)
+            {
+                newTime = 1000;
+                timeMessage = "[Server] Shine bright like a diamond";
+            }
+            else if(nightPower == 1)
+            {
+                newTime = 18000;
+                timeMessage = "[Server] Tonight we steal the MOOOOOONN!";
+            }
+            else {
+                switch (choice) {
+                    case 0 -> { // Day (e.g., 1000 ticks into the day)
+                        newTime = 1000;
+                        timeMessage = "[Server] The time has been set to Day!";
+                    }
+                    case 1 -> { // Sunset/Dusk (e.g., around 13000 ticks)
+                        newTime = 13000;
+                        timeMessage = "[Server] The sun begins to set...";
+                    }
+                    case 2 -> { // Night (e.g., around 18000 ticks)
+                        newTime = 18000;
+                        timeMessage = "[Server] The moon now shines bright!";
+                    }
+                    default -> { // Fallback, shouldn't happen with nextInt(3)
+                        newTime = targetWorld.getTimeOfDay(); // Keep current time
+                        timeMessage = "[Server] The time seems unchanged.";
+                    }
                 }
             }
-
             // Set the time of day for the target world
             targetWorld.setTimeOfDay(newTime);
             broadcast(server, timeMessage);
@@ -92,6 +127,15 @@ public class TimeSoda extends Item {
         }
     }
     @Override
+    public boolean isEnchantable(ItemStack stack) {
+        return stack.getMaxDamage() > 0;
+    }
+
+    @Override
+    public int getEnchantability() {
+        return 14; // same as iron tools
+    }
+    @Override
     public boolean canBeEnchantedWith(ItemStack stack, RegistryEntry<Enchantment> enchantment, EnchantingContext context) {
         // Get the enchantment's registry key
         RegistryKey<Enchantment> enchantmentKey = enchantment.getKey().orElse(null);
@@ -106,6 +150,20 @@ public class TimeSoda extends Item {
         }
         // Allow Mending
         if (enchantmentKey.equals(Enchantments.MENDING)) {
+            return true;
+        }
+        RegistryKey<Enchantment> day_power = RegistryKey.of(
+                RegistryKeys.ENCHANTMENT,
+                Identifier.of("cobblemonaddonmod", "day_power")
+        );
+        if (enchantmentKey.equals(day_power)) {
+            return true;
+        }
+        RegistryKey<Enchantment> night_power = RegistryKey.of(
+                RegistryKeys.ENCHANTMENT,
+                Identifier.of("cobblemonaddonmod", "night_power")
+        );
+        if (enchantmentKey.equals(night_power)) {
             return true;
         }
 

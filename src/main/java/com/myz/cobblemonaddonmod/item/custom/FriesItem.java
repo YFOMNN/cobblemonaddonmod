@@ -70,24 +70,23 @@ public class FriesItem extends Item {
             );
             double dashStrength;
             switch (powerLevel) {
-                case 1 -> dashStrength = 7;
-                case 2 -> dashStrength = 10;
-                case 3 -> dashStrength = 15;
-                case 4 -> dashStrength = 17;
+                case 1 -> dashStrength = 1.5;
+                case 2 -> dashStrength = 2;
+                case 3 -> dashStrength = 5;
+                case 4 -> dashStrength = 10;
                 case 5 -> dashStrength = 20;
-                default -> dashStrength = 5;
+                default -> dashStrength = 1.25;
             }
 
             // 2. Get the player's raw look direction.
             Vec3d rawLookDirection = user.getRotationVector();
-            double verticalDampeningFactor = 0.35;
             Vec3d controlledDirection = new Vec3d(
                     rawLookDirection.getX(),
-                    rawLookDirection.getY() * verticalDampeningFactor,
+                    rawLookDirection.getY(),
                     rawLookDirection.getZ()
             ).normalize();
             Vec3d dashVelocity = controlledDirection.multiply(dashStrength);
-
+            user.setVelocity(new Vec3d(0,0,0));//trying out
             user.addVelocity(dashVelocity.getX(), dashVelocity.getY(), dashVelocity.getZ());
             user.velocityModified = true;
             if (user instanceof ServerPlayerEntity serverPlayer) {

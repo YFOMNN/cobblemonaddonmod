@@ -21,8 +21,19 @@ import java.util.Random;
 
 public class WeatherMilkItem extends Item {
 
-    public WeatherMilkItem(Settings settings) {
+    private final Variant variant;
+
+    public enum Variant {
+        BASE,
+        CLEAR,
+        THUNDER,
+        RAIN
+    }
+
+
+    public WeatherMilkItem(Settings settings, Variant base) {
         super(settings.maxDamage(10));
+        this.variant = base;
     }
 
     @Override
@@ -51,23 +62,41 @@ public class WeatherMilkItem extends Item {
             // Duration for weather (in ticks). For example, 5 minutes = 5 * 60 * 20 = 6000 ticks.
             int duration = 6000; // 5 minutes
 
-            switch (choice) {
-                case 0 -> { // Clear
-                    // Arguments: clearDuration, rainDuration, thunderDuration
+            switch (variant)
+            {
+                case BASE -> {
+                    switch (choice) {
+                        case 0 -> { // Clear
+                            // Arguments: clearDuration, rainDuration, thunderDuration
+                            overworld.setWeather(duration, 0, false, false);
+                            broadcast(server, "Sunshine lollipops and Rainbows");
+                        }
+                        case 1 -> { // Rain
+                            // Arguments: clearDuration, rainDuration, thunderDuration (last two are isRaining, isThundering)
+                            overworld.setWeather(0, duration, true, false);
+                            broadcast(server, "AARGHHHHH, WATERRRRR!!! WATER FROM THE SKYYYY");
+                        }
+                        // You can add a third case for thunder if you expand random.nextInt(3)
+                        case 2 -> { // Thunder
+                            overworld.setWeather(0, duration, true, true);
+                            broadcast(server, "Is there a thunderous nearby???");
+                        }
+                    }
+                }
+                case CLEAR -> {
                     overworld.setWeather(duration, 0, false, false);
-                    broadcast(server, "[Server] The weather is now clear!");
+                    broadcast(server, "Sunshine lollipops and Rainbows");
                 }
-                case 1 -> { // Rain
-                    // Arguments: clearDuration, rainDuration, thunderDuration (last two are isRaining, isThundering)
+                case THUNDER -> {
+                    overworld.setWeather(0, duration, true, true);
+                    broadcast(server, "Is there a thunderous nearby???");
+                }
+                case RAIN -> {
                     overworld.setWeather(0, duration, true, false);
-                    broadcast(server, "[Server] It started raining!");
-                }
-                // You can add a third case for thunder if you expand random.nextInt(3)
-                case 2 -> { // Thunder
-                     overworld.setWeather(0, duration, true, true);
-                     broadcast(server, "[Server] A thunderstorm is brewing!");
+                    broadcast(server, "AARGHHHHH, WATERRRRR!!! WATER FROM THE SKYYYY");
                 }
             }
+
             user.getItemCooldownManager().set(this, 100);
             stack.damage(1,(ServerWorld) world, ((ServerPlayerEntity) user), item -> { user.sendEquipmentBreakStatus(item, EquipmentSlot.MAINHAND); });
         }

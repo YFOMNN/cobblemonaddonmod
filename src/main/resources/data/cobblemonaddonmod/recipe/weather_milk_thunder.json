@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "cobblemonaddonmod:weather_milk"
+    },
+    {
+      "item": "cobblemonaddonmod:weather_milk"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "item": "cobblemonaddonmod:weather_milk_thunder"
+  }
+}

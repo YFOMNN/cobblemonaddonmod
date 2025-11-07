@@ -20,6 +20,7 @@ public class ModBlocks {
     public static final Block DATA_RECEIVER = registerBlock("data_receiver_block",new DataReceiverBlock(AbstractBlock.Settings.create().strength(4f).requiresTool().sounds(BlockSoundGroup.ANVIL)));
     public static final Block GUESS_THE_COBBLEMON_CONTROL_BLOCK = registerBlock("guess_the_cobblemon_control_block",new GuessTheCobblemonControlBlock(AbstractBlock.Settings.create().strength(4f).requiresTool().sounds(BlockSoundGroup.COPPER)));
     public static final Block RANDOM_POKEMON_BATTLE_BLOCK = registerBlock("random_pokemon_battle_block",new RandomPokemonBattleBlock(AbstractBlock.Settings.create().strength(4f).requiresTool().sounds(BlockSoundGroup.COPPER)));
+    public static final Block EXPERIENCE_BLOCK = registerBlock("experience_block",new ExperienceBlock(AbstractBlock.Settings.create().strength(4f).requiresTool().sounds(BlockSoundGroup.COPPER)));
 
     private static Block registerBlock(String name, Block block)
     {
@@ -41,6 +42,7 @@ public class ModBlocks {
             fabricItemGroupEntries.add(ModBlocks.DATA_RECEIVER);
             fabricItemGroupEntries.add(ModBlocks.GUESS_THE_COBBLEMON_CONTROL_BLOCK);
             fabricItemGroupEntries.add(ModBlocks.RANDOM_POKEMON_BATTLE_BLOCK);
+            fabricItemGroupEntries.add(ModBlocks.EXPERIENCE_BLOCK);
         });
     }
 }

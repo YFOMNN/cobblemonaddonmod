@@ -6,7 +6,8 @@
     "cobblemonaddonmod:guess_the_cobblemon_control_block",
     "cobblemonaddonmod:data_receiver_block",
     "cobblemonaddonmod:pokemon_spawner_block",
-    "cobblemonaddonmod:random_pokemon_battle_block"
+    "cobblemonaddonmod:random_pokemon_battle_block",
+    "cobblemonaddonmod:experience_block"
 
   ]
 }

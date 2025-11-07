@@ -2,7 +2,9 @@ package com.myz.cobblemonaddonmod.enchantment;
 
 import com.mojang.serialization.MapCodec;
 import com.myz.cobblemonaddonmod.CobblemonAddonMod;
+import com.myz.cobblemonaddonmod.enchantment.custom.DayPowerEnchantmentEffect;
 import com.myz.cobblemonaddonmod.enchantment.custom.LightningStrikerEnchantmentEffect;
+import com.myz.cobblemonaddonmod.enchantment.custom.NightPowerEnchantmentEffect;
 import com.myz.cobblemonaddonmod.enchantment.custom.TeleportingTargetEnchantmentEffect;
 import net.minecraft.enchantment.effect.EnchantmentEntityEffect;
 import net.minecraft.registry.Registries;
@@ -23,6 +25,12 @@ public class ModEnchantmentEffects {
 
     public static final MapCodec<TeleportingTargetEnchantmentEffect> TARGET_ENCHANTMENT_EFFECT =
             registerEntityEffect("teleport_effect", TeleportingTargetEnchantmentEffect.CODEC);
+
+    public static final MapCodec<DayPowerEnchantmentEffect> DAY_POWER_ENCHANTMENT_EFFECT =
+            registerEntityEffect("day_power", DayPowerEnchantmentEffect.CODEC);
+
+    public static final MapCodec<NightPowerEnchantmentEffect> NIGHT_POWER_ENCHANTMENT_EFFECT =
+            registerEntityEffect("night_power", NightPowerEnchantmentEffect.CODEC);
 
 
     public static void registerEnchantmentEffects() {
