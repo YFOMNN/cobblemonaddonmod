@@ -1,0 +1,13 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures":
+  {
+    "up": "cobblemonaddonmod:block/game_floor_block",
+    "north": "cobblemonaddonmod:block/game_floor_block",
+    "south": "cobblemonaddonmod:block/game_floor_block",
+    "east": "cobblemonaddonmod:block/game_floor_block",
+    "west": "cobblemonaddonmod:block/game_floor_block",
+    "down": "cobblemonaddonmod:block/game_floor_block",
+    "particle": "cobblemonaddonmod:block/game_floor_block"
+  }
+}

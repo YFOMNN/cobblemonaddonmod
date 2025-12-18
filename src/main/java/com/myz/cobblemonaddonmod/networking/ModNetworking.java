@@ -15,17 +15,29 @@ public class ModNetworking {
 
     public static final Identifier TELEPORT_REQUEST_ID = Identifier.of(CobblemonAddonMod.MOD_ID, "teleport_request");
 
-    // Server-side registration only
+    // Register on both sides
     public static void registerC2SPackets() {
+        // Register payload type for both client and server
         PayloadTypeRegistry.playC2S().register(TeleportRequestPayload.ID, TeleportRequestPayload.CODEC);
 
+        // Server receiver
         ServerPlayNetworking.registerGlobalReceiver(TeleportRequestPayload.ID, (payload, context) -> {
+            // Validate payload before executing
+            if (payload == null || payload.targetName() == null || payload.hand() == null) {
+                CobblemonAddonMod.LOGGER.error("Received invalid teleport request payload");
+                return;
+            }
+
             context.server().execute(() -> {
-                TeleportTargetScreenHandler.teleportToTarget(
-                        context.player(),
-                        payload.targetName(),
-                        payload.hand()
-                );
+                try {
+                    TeleportTargetScreenHandler.teleportToTarget(
+                            context.player(),
+                            payload.targetName(),
+                            payload.hand()
+                    );
+                } catch (Exception e) {
+                    CobblemonAddonMod.LOGGER.error("Error handling teleport request", e);
+                }
             });
         });
     }
@@ -33,15 +45,22 @@ public class ModNetworking {
     public record TeleportRequestPayload(String targetName, Hand hand) implements CustomPayload {
         public static final CustomPayload.Id<TeleportRequestPayload> ID = new CustomPayload.Id<>(TELEPORT_REQUEST_ID);
 
-        public static final PacketCodec<RegistryByteBuf, TeleportRequestPayload> CODEC = PacketCodec.tuple(
-                PacketCodecs.STRING, TeleportRequestPayload::targetName,
-                PacketCodecs.VAR_INT.xmap(
-                        i -> i == 0 ? Hand.MAIN_HAND : Hand.OFF_HAND,
-                        h -> h == Hand.MAIN_HAND ? 0 : 1
-                ),
-                TeleportRequestPayload::hand,
-                TeleportRequestPayload::new
-        );
+        // Simplified codec without xmap to avoid potential issues
+        public static final PacketCodec<RegistryByteBuf, TeleportRequestPayload> CODEC = new PacketCodec<>() {
+            @Override
+            public TeleportRequestPayload decode(RegistryByteBuf buf) {
+                String targetName = PacketCodecs.STRING.decode(buf);
+                int handOrdinal = PacketCodecs.VAR_INT.decode(buf);
+                Hand hand = handOrdinal == 0 ? Hand.MAIN_HAND : Hand.OFF_HAND;
+                return new TeleportRequestPayload(targetName, hand);
+            }
+
+            @Override
+            public void encode(RegistryByteBuf buf, TeleportRequestPayload payload) {
+                PacketCodecs.STRING.encode(buf, payload.targetName());
+                PacketCodecs.VAR_INT.encode(buf, payload.hand() == Hand.MAIN_HAND ? 0 : 1);
+            }
+        };
 
         @Override
         public Id<? extends CustomPayload> getId() {

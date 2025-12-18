@@ -1,6 +1,8 @@
 package com.myz.cobblemonaddonmod.item.custom;
 
 import net.fabricmc.fabric.api.item.v1.EnchantingContext;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.DyedColorComponent;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.enchantment.Enchantment;
@@ -17,16 +19,16 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.text.Text;
 
+public class FriesItem extends Item  {
+    private static final int DEFAULT_COLOR = 0xFFD700; // Gold/yellow color for fries
 
-
-public class FriesItem extends Item {
     public FriesItem(Settings settings) {
         super(settings.maxDamage(100));
     }
@@ -39,7 +41,7 @@ public class FriesItem extends Item {
         if (!world.isClient()) {
             ServerWorld serverWorld = (ServerWorld) world;
 
-            // --- Custom Enchantment Logic (No changes) ---
+            // --- Custom Enchantment Logic ---
             RegistryKey<Enchantment> lightningStrikerKey = RegistryKey.of(
                     RegistryKeys.ENCHANTMENT,
                     Identifier.of("cobblemonaddonmod", "lightning_striker")
@@ -51,14 +53,70 @@ public class FriesItem extends Item {
                             .orElse(null),
                     stack
             );
+
+            // Handle Lightning Striker enchantment levels
             switch (enchantmentLevel) {
                 case 1 -> user.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOW_FALLING, 20));
                 case 2 -> user.addStatusEffect(new StatusEffectInstance(StatusEffects.LEVITATION, 30));
+                case 3 -> {
+                    // Rocket launch behavior for Lightning Striker 3
+                    // Apply continuous thrust over time like a real firework rocket
+                    int rocketDuration = 20; // Duration in ticks (20 ticks = 1 second for level 1 rocket)
+                    double thrustPerTick = 0.1; // Thrust applied each tick
+
+                    // Get the player's current look direction for initial boost
+                    Vec3d lookDirection = user.getRotationVector();
+
+                    // Apply initial boost
+                    Vec3d initialBoost = lookDirection.multiply(0.3);
+                    user.addVelocity(initialBoost.getX(), initialBoost.getY(), initialBoost.getZ());
+
+                    // Schedule continuous thrust over the duration
+                    for (int i = 1; i <= rocketDuration; i++) {
+                        final int tickDelay = i;
+                        serverWorld.getServer().execute(() -> {
+                            serverWorld.getServer().send(new net.minecraft.server.ServerTask(
+                                    serverWorld.getServer().getTicks() + tickDelay,
+                                    () -> {
+                                        if (user.isAlive() && !user.isRemoved()) {
+                                            // Get current look direction each tick for steering
+                                            Vec3d currentLookDirection = user.getRotationVector();
+                                            Vec3d thrust = currentLookDirection.multiply(thrustPerTick);
+                                            user.addVelocity(thrust.getX(), thrust.getY(), thrust.getZ());
+                                            user.velocityModified = true;
+
+                                            if (user instanceof ServerPlayerEntity serverPlayer) {
+                                                serverPlayer.networkHandler.sendPacket(
+                                                        new net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket(serverPlayer)
+                                                );
+                                            }
+                                        }
+                                    }
+                            ));
+                        });
+                    }
+
+                    user.velocityModified = true;
+                    if (user instanceof ServerPlayerEntity serverPlayer) {
+                        serverPlayer.networkHandler.sendPacket(
+                                new net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket(serverPlayer)
+                        );
+                    }
+
+                    world.playSound(null, user.getBlockPos(), SoundEvents.ENTITY_FIREWORK_ROCKET_LAUNCH,
+                            SoundCategory.PLAYERS, 1.0F, 1.0F);
+
+                    // Skip the normal dash logic when Lightning Striker 3 is active
+                    user.getItemCooldownManager().set(this, 20);
+                    stack.damage(1, (ServerWorld) world, (ServerPlayerEntity) user,
+                            item -> user.sendEquipmentBreakStatus(item, EquipmentSlot.MAINHAND));
+                    return TypedActionResult.success(stack, world.isClient());
+                }
                 default -> {
                 }
             }
 
-            // --- REVISED DASHING LOGIC ---
+            // --- DASHING LOGIC (only runs if not Lightning Striker 3) ---
 
             // 1. Get Power Level and keep your original strength values.
             int powerLevel = EnchantmentHelper.getLevel(

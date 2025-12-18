@@ -1,0 +1,9 @@
+{
+  "variants":
+  {
+    "":
+    {
+      "model": "cobblemonaddonmod:block/game_floor_block"
+    }
+  }
+}

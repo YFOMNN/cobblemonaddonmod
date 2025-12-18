@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key":
+  {
+    "a":
+    {
+      "item": "cobblemonaddonmod:experience_block"
+    }
+  },
+  "pattern":
+  [
+    "aaa",
+    "aaa",
+    "aaa"
+  ],
+  "result":
+  {
+    "count": 20,
+    "id": "cobblemonaddonmod:supply_crate_block"
+  }
+}

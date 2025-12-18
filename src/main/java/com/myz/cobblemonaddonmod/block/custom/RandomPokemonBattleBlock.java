@@ -75,8 +75,7 @@ public class RandomPokemonBattleBlock extends Block {
                 {
                     BlockEntity be = world.getBlockEntity(bp);
                     if(be instanceof PokemonSpawnerBlockEntity pokemonSpawnerBlockEntity){
-                        PokemonSpawnHelper.spawnCatchablePokemonAt(Objects.requireNonNull(world), be.getPos(), PokemonSpawnHelper.pickPokemon(true),20);
-
+                        PokemonSpawnHelper.spawnCatchablePokemonAt(Objects.requireNonNull(world), be.getPos(), PokemonSpawnHelper.pickPokemon(true),20,player);
                     }
                 }
 

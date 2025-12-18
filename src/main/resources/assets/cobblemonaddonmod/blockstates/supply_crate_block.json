@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "ready=true": {
+      "model": "cobblemonaddonmod:block/supply_crate_ready"
+    },
+    "ready=false": {
+      "model": "cobblemonaddonmod:block/supply_crate_cooldown"
+    }
+  }
+}

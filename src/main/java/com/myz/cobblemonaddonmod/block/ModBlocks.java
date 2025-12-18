@@ -21,6 +21,9 @@ public class ModBlocks {
     public static final Block GUESS_THE_COBBLEMON_CONTROL_BLOCK = registerBlock("guess_the_cobblemon_control_block",new GuessTheCobblemonControlBlock(AbstractBlock.Settings.create().strength(4f).requiresTool().sounds(BlockSoundGroup.COPPER)));
     public static final Block RANDOM_POKEMON_BATTLE_BLOCK = registerBlock("random_pokemon_battle_block",new RandomPokemonBattleBlock(AbstractBlock.Settings.create().strength(4f).requiresTool().sounds(BlockSoundGroup.COPPER)));
     public static final Block EXPERIENCE_BLOCK = registerBlock("experience_block",new ExperienceBlock(AbstractBlock.Settings.create().strength(4f).requiresTool().sounds(BlockSoundGroup.COPPER)));
+    public static final Block GAME_FLOOR_BLOCK = registerBlock("game_floor_block",new GameFloorBlock(AbstractBlock.Settings.create().strength(4f).requiresTool().sounds(BlockSoundGroup.COPPER)));
+    public static final Block SUPPLY_CRATE_BLOCK = registerBlock("supply_crate_block",new SupplyCrateBlock(AbstractBlock.Settings.create().strength(4f).requiresTool().sounds(BlockSoundGroup.COPPER)));
+
 
     private static Block registerBlock(String name, Block block)
     {
@@ -43,6 +46,8 @@ public class ModBlocks {
             fabricItemGroupEntries.add(ModBlocks.GUESS_THE_COBBLEMON_CONTROL_BLOCK);
             fabricItemGroupEntries.add(ModBlocks.RANDOM_POKEMON_BATTLE_BLOCK);
             fabricItemGroupEntries.add(ModBlocks.EXPERIENCE_BLOCK);
+            fabricItemGroupEntries.add(ModBlocks.GAME_FLOOR_BLOCK);
+            fabricItemGroupEntries.add(ModBlocks.SUPPLY_CRATE_BLOCK);
         });
     }
 }

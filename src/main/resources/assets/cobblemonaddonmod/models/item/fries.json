@@ -2,6 +2,7 @@
   "parent": "minecraft:item/generated",
   "textures":
   {
-      "layer0": "cobblemonaddonmod:item/fries"
+      "layer0": "cobblemonaddonmod:item/fries",
+      "layer1": "cobblemonaddonmod:item/fries_overlay"
   }
 }

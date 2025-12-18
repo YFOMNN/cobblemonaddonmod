@@ -3,6 +3,8 @@ package com.myz.cobblemonaddonmod.item;
 import com.myz.cobblemonaddonmod.CobblemonAddonMod;
 import com.myz.cobblemonaddonmod.item.custom.*;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
+import net.minecraft.component.DataComponentTypes;
+import net.minecraft.component.type.DyedColorComponent;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroups;
 import net.minecraft.registry.Registries;

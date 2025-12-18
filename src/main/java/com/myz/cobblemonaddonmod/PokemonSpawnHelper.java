@@ -8,24 +8,30 @@ import com.cobblemon.mod.common.api.pokemon.PokemonSpecies;
 import com.cobblemon.mod.common.api.storage.StoreCoordinates;
 import com.cobblemon.mod.common.entity.pokemon.PokemonBehaviourFlag;
 import com.cobblemon.mod.common.entity.pokemon.PokemonEntity;
+import com.cobblemon.mod.common.pokemon.FormData;
 import com.cobblemon.mod.common.pokemon.OriginalTrainerType;
 import com.cobblemon.mod.common.pokemon.Pokemon;
 import com.cobblemon.mod.common.pokemon.Species;
 import com.cobblemon.mod.common.pokemon.status.PersistentStatus;
 import com.cobblemon.mod.common.pokemon.status.PersistentStatusContainer;
+import net.minecraft.block.BlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.registry.Registries;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
+import java.io.Console;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -38,8 +44,22 @@ public class PokemonSpawnHelper {
 // Build Pokémon data
         PokemonProperties props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+","") + " level=1 " + extraflag);
 
-        Pokemon pokemonData = props.create();
+        Pokemon pokemonTemp = props.create();
+        PokemonEntity tempEntity = new PokemonEntity(
+                serverWorld,
+                pokemonTemp,
+                CobblemonEntities.POKEMON
+        );
 
+        float width  = tempEntity.getWidth();
+        float maxSize = 1.0F;
+        String scaleString = "";
+        if (width > maxSize) {
+            float scaleFactor = maxSize / width;
+            scaleString = " scale_modifier=" + scaleFactor;
+        }
+        props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+","") + " level=1 "+scaleString + extraflag);
+        Pokemon pokemonData = props.create();
 // Step 2: create the entity with this Pokémon
         PokemonEntity entity = new PokemonEntity(
                 serverWorld,
@@ -51,35 +71,20 @@ public class PokemonSpawnHelper {
                 pos.getX() + 0.5,
                 pos.getY() + 1,
                 pos.getZ() + 0.5,
-                serverWorld.random.nextFloat() * 360F,
+                pos.north().asLong(),
                 0F
         );
         entity.setInvulnerable(true);
 
         entity.noClip = true;
-// Step 3: check size
-        float width  = entity.getWidth();
-        float height = entity.getHeight();
-        float maxSize = 2.0F;
-
-        if (width > maxSize || height > maxSize) {
-            float scaleFactor = Math.min(maxSize / width, maxSize / height);
-
-            // Adjust Pokémon’s internal scale modifier
-            pokemonData.setScaleModifier(pokemonData.getScaleModifier() * scaleFactor);
-
-            // Re-apply Pokémon data into entity so size updates
-            entity.setPokemon(pokemonData);
-        }
 
         // Step 4: make uncatchable
 
         // Step 5: spawn
         entity.setAiDisabled(true);
+        entity.disableExperienceDropping();
         // Spawn into world
         serverWorld.spawnEntity(entity);
-
-
     }
 
     public static void spawnCatchablePokemonAt(MinecraftServer server, BlockPos pos, String pokemonName) {
@@ -94,7 +99,7 @@ public class PokemonSpawnHelper {
         server.getCommandManager().executeWithPrefix(source, command);
     }
 
-    public static void spawnCatchablePokemonAt(World world, BlockPos pos, String pokemonName,float shinyChance) {
+    public static void spawnCatchablePokemonAt(World world, BlockPos pos, String pokemonName, float shinyChance, PlayerEntity player) {
         List<String> ivStats = new ArrayList<>();
         ivStats.add(" hp_iv=31");
         ivStats.add(" attack_iv=31");
@@ -102,38 +107,79 @@ public class PokemonSpawnHelper {
         ivStats.add(" defence_iv=31");
         ivStats.add(" special_defence_iv=31");
         ivStats.add(" speed_iv=31");
-
+        String aspectString ="";
         // 2. Randomly shuffle the list.
         Collections.shuffle(ivStats);
 
         ServerWorld serverWorld = (ServerWorld) world;
 // Build Pokémon data
         PokemonProperties props;
+
+        props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+","") + " level=50 ");
+        Pokemon pokemonTemp = props.create();
+        List<FormData> list = new ArrayList<>();
+        for (FormData formData: pokemonTemp.getSpecies().getForms())
+        {
+            if(!formData.getName().toLowerCase().contains("mega") && !formData.getName().toLowerCase().contains("gmax"))
+                list.add(formData);
+        }
+        if(!list.isEmpty()){
+            Collections.shuffle(list);
+            pokemonTemp.setForm(list.getFirst());
+            FormData selectedForm = list.get(0);
+
+            // Get the aspects (these are the property strings Cobblemon uses)
+            List<String> aspects = selectedForm.getAspects();
+
+            // Build property string with aspects
+            aspectString = aspects.isEmpty() ? "" : " " + String.join(" ", aspects);
+
+            pokemonTemp.updateAspects();
+            player.sendMessage(
+                    Text.literal(pokemonName + " Form " + pokemonTemp.getForm().getName()),
+                    false
+            );
+        }
+        PokemonEntity tempEntity = new PokemonEntity(
+                serverWorld,
+                pokemonTemp,
+                CobblemonEntities.POKEMON
+        );
+
+        float width  = tempEntity.getWidth();
+        float maxSize = 1.0F;
+        String scaleString = "";
+        if (width > maxSize) {
+            float scaleFactor = maxSize / width;
+            scaleString = " scale_modifier=" + scaleFactor;
+        }
+
         Random random = new Random();
         int chance = random.nextInt(100);
-        int selectedIV;
         if(chance < 100-shinyChance)
-            props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+","") + " level=50 ");
+            props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+","") + " level=50"+ aspectString + scaleString);
         else
         {
             int perfectIVchance = random.nextInt(100);
             if (perfectIVchance < 50) {
-                props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+", "") + " level=50 shiny");
+                props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+", "") + " level=50 shiny"+ aspectString   + scaleString);
             }
             else if (perfectIVchance < 70) {
-                props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+", "") + " level=50 shiny "+ ivStats.get(0));
+                props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+", "") + " level=50 shiny "+ ivStats.get(0)+ aspectString + scaleString);
             }
             else if (perfectIVchance < 85) {
-                props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+", "") + " level=50 shiny"+ivStats.get(1)+ivStats.get(0));
+                props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+", "") + " level=50 shiny"+ivStats.get(1)+ivStats.get(0)+ aspectString+ scaleString);
             }
             else if (perfectIVchance < 95) {
-                props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+", "") + " level=50 shiny" + ivStats.get(0)  + ivStats.get(1)+ ivStats.get(2)+ ivStats.get(3));
+                props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+", "") + " level=50 shiny" + ivStats.get(0)  + ivStats.get(1)+ ivStats.get(2)+ ivStats.get(3)+ aspectString+ scaleString);
             }
             else{
-                props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+", "") + " level=50 shiny " + ivStats.get(0)  + ivStats.get(1)+ ivStats.get(2)+ ivStats.get(3)+ ivStats.get(4)+ ivStats.get(5));
+                props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+", "") + " level=50 shiny " + ivStats.get(0)  + ivStats.get(1)+ ivStats.get(2)+ ivStats.get(3)+ ivStats.get(4)+ ivStats.get(5)+ aspectString+scaleString);
             }
+            props.asRenderablePokemon().getSpecies().getForms();
         }
         Pokemon pokemonData = props.create();
+
 
 // Step 2: create the entity with this Pokémon
         PokemonEntity entity = new PokemonEntity(
@@ -152,19 +198,6 @@ public class PokemonSpawnHelper {
         entity.setInvulnerable(true);
 
 // Step 3: check size
-        float width  = entity.getWidth();
-        float height = entity.getHeight();
-        float maxSize = 2.0F;
-
-        if (width > maxSize || height > maxSize) {
-            float scaleFactor = Math.min(maxSize / width, maxSize / height);
-
-            // Adjust Pokémon’s internal scale modifier
-            pokemonData.setScaleModifier(pokemonData.getScaleModifier() * scaleFactor);
-
-            // Re-apply Pokémon data into entity so size updates
-            entity.setPokemon(pokemonData);
-        }
 
         entity.setAiDisabled(true);
         // Spawn into world

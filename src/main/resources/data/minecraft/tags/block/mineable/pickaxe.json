@@ -7,7 +7,10 @@
     "cobblemonaddonmod:data_receiver_block",
     "cobblemonaddonmod:pokemon_spawner_block",
     "cobblemonaddonmod:random_pokemon_battle_block",
-    "cobblemonaddonmod:experience_block"
+    "cobblemonaddonmod:experience_block",
+    "cobblemonaddonmod:game_floor_block",
+    "cobblemonaddonmod:supply_crate_block"
+
 
 
   ]

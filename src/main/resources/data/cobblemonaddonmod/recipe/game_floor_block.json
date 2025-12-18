@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key":
+  {
+    "a":
+    {
+      "item": "cobblemonaddonmod:pokemon_spawner_block"
+    }
+  },
+  "pattern":
+  [
+    "aaa",
+    "aaa",
+    "aaa"
+  ],
+  "result":
+  {
+    "count": 20,
+    "id": "cobblemonaddonmod:game_floor_block"
+  }
+}

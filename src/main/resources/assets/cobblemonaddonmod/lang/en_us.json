@@ -10,6 +10,8 @@
   "item.cobblemonaddonmod.bottle_cap": "Bottle Cap",
   "item.cobblemonaddonmod.passport": "Passport",
   "block.cobblemonaddonmod.food_grill": "Food Grill",
+  "block.cobblemonaddonmod.game_floor_block": "Void Block",
+  "block.cobblemonaddonmod.supply_crate_block": "Supply Crate",
   "block.cobblemonaddonmod.highest_bst_control_block": "Highest BST Challenge",
   "block.cobblemonaddonmod.data_receiver_block": "Data Receiver Block",
   "block.cobblemonaddonmod.guess_the_cobblemon_control_block": "Guess The Pokemon",
