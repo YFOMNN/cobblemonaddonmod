@@ -17,6 +17,7 @@ public class ModItems {
     public static final Item FRIES = registerItem("fries", new FriesItem(new Item.Settings()));
     public static final Item BEN_AND_HADI = registerItem("ben_and_hadi", new BenAndHadiItem(new Item.Settings()));
     public static final Item TIME_SODA = registerItem("time_soda", new TimeSoda(new Item.Settings()));
+    public static final Item LEVEL_EXTRACTOR = registerItem("level_extractor",new LevelExtractorItem(new Item.Settings()));
     public static final Item BOTTLE_CAP = registerItem("bottle_cap", new BottleCapItem(new Item.Settings().maxCount(12)));
     public static final Item PASSPORT = registerItem("passport", new PassportItem(new Item.Settings().maxCount(12)));
     public static final Item WEATHER_MILK = registerItem("weather_milk",new WeatherMilkItem(new Item.Settings(), WeatherMilkItem.Variant.BASE));
@@ -44,6 +45,7 @@ public class ModItems {
             fabricItemGroupEntries.add(TIME_SODA);
             fabricItemGroupEntries.add(BOTTLE_CAP);
             fabricItemGroupEntries.add(PASSPORT);
+            fabricItemGroupEntries.add(LEVEL_EXTRACTOR);
         });
     }
 }

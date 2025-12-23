@@ -157,37 +157,36 @@ public class PokemonSpawnHelper {
         Random random = new Random();
         int chance = random.nextInt(100);
         if(chance < 100-shinyChance)
-            props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+","") + " level=50"+ aspectString + scaleString);
+            props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+","") + " level=80"+ aspectString + scaleString);
         else
         {
             int perfectIVchance = random.nextInt(100);
             if (perfectIVchance < 50) {
-                props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+", "") + " level=50 shiny"+ aspectString   + scaleString);
+                props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+", "") + " level=80 shiny"+ aspectString   + scaleString);
             }
             else if (perfectIVchance < 70) {
-                props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+", "") + " level=50 shiny "+ ivStats.get(0)+ aspectString + scaleString);
+                props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+", "") + " level=80 shiny "+ ivStats.get(0)+ aspectString + scaleString);
             }
             else if (perfectIVchance < 85) {
-                props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+", "") + " level=50 shiny"+ivStats.get(1)+ivStats.get(0)+ aspectString+ scaleString);
+                props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+", "") + " level=80 shiny"+ivStats.get(1)+ivStats.get(0)+ aspectString+ scaleString);
             }
             else if (perfectIVchance < 95) {
-                props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+", "") + " level=50 shiny" + ivStats.get(0)  + ivStats.get(1)+ ivStats.get(2)+ ivStats.get(3)+ aspectString+ scaleString);
+                props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+", "") + " level=80 shiny" + ivStats.get(0)  + ivStats.get(1)+ ivStats.get(2)+ ivStats.get(3)+ aspectString+ scaleString);
             }
             else{
-                props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+", "") + " level=50 shiny " + ivStats.get(0)  + ivStats.get(1)+ ivStats.get(2)+ ivStats.get(3)+ ivStats.get(4)+ ivStats.get(5)+ aspectString+scaleString);
+                props = PokemonProperties.Companion.parse(pokemonName.replaceAll("\\s+", "") + " level=80 shiny " + ivStats.get(0)  + ivStats.get(1)+ ivStats.get(2)+ ivStats.get(3)+ ivStats.get(4)+ ivStats.get(5)+ aspectString+scaleString);
             }
             props.asRenderablePokemon().getSpecies().getForms();
         }
         Pokemon pokemonData = props.create();
 
-
+        pokemonData.teachLearnableMoves(true);
 // Step 2: create the entity with this Pokémon
         PokemonEntity entity = new PokemonEntity(
                 serverWorld,
                 pokemonData,
                 CobblemonEntities.POKEMON
         );
-
         entity.refreshPositionAndAngles(
                 pos.getX() + 0.5,
                 pos.getY() + 1,
